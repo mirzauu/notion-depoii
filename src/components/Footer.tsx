@@ -47,7 +47,7 @@ export function Footer() {
               </li>
               <li>
                 <Link href="#pilot" prefetch={false} className="hover:text-neutral-950 transition-colors">
-                  Founding Cohort Access
+                  Corridor Lockout &amp; Pricing
                 </Link>
               </li>
               <li>

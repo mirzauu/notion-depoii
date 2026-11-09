@@ -230,8 +230,8 @@ export function LeadPipelineFinder() {
           </p>
         </div>
 
-        {/* Interactive Filter Control Canvas */}
-        <div className="p-6 bg-white rounded-2xl border border-neutral-200 shadow-2xs mb-8">
+        {/* Interactive Filter Control Canvas (Hidden on Mobile) */}
+        <div className="hidden md:block p-6 bg-white rounded-2xl border border-neutral-200 shadow-2xs mb-8">
           <div className="flex items-center gap-2 pb-4 mb-5 border-b border-neutral-100 text-[13px] font-bold text-neutral-950">
             <Filter className="w-4 h-4 text-neutral-600" />
             <span>Commercial Territory Filters</span>

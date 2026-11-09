@@ -62,13 +62,6 @@ export function Navbar() {
         {/* Right CTA / Auth */}
         <div className="hidden sm:flex items-center gap-3">
           <Link
-            href="https://app.depoii.com"
-            prefetch={false}
-            className="px-3.5 py-1.5 text-[14px] font-medium text-black/80 hover:text-black rounded-md hover:bg-black/[0.04] transition-colors"
-          >
-            Log in
-          </Link>
-          <Link
             href="#pilot"
             prefetch={false}
             className="px-4 py-2 text-[14px] font-semibold rounded-full text-white bg-neutral-950 hover:bg-neutral-800 transition-all shadow-sm active:scale-[0.98]"
@@ -79,13 +72,6 @@ export function Navbar() {
 
         {/* Mobile menu toggle */}
         <div className="md:hidden flex items-center gap-2">
-          <Link
-            href="https://app.depoii.com"
-            prefetch={false}
-            className="sm:hidden px-3 py-1 text-[13px] font-medium text-black/80"
-          >
-            Log in
-          </Link>
           <button
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
             className="p-1.5 text-black/80 hover:text-black rounded-md"
@@ -131,14 +117,6 @@ export function Navbar() {
               className="w-full py-2.5 text-center font-semibold rounded-full text-white bg-neutral-950 hover:bg-neutral-800 block shadow-sm"
             >
               Claim territory
-            </Link>
-            <Link
-              href="https://app.depoii.com"
-              prefetch={false}
-              onClick={() => setMobileMenuOpen(false)}
-              className="w-full py-2.5 text-center font-medium rounded-lg text-black bg-[#f6f5f4] block"
-            >
-              Log in
             </Link>
           </div>
         </div>

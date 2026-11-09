@@ -190,16 +190,16 @@ export function CTASection() {
       <div className="mx-auto max-w-6xl px-5 sm:px-8">
         {/* Section Header */}
         <div className="mx-auto max-w-3xl text-center">
-          <div className="flex justify-center">
-            <ClayBadge label="Founding Cohort" color="rose" />
-          </div>
-
-          <h2 className="mt-5 text-[2.15rem] leading-[1.12] font-bold tracking-tight text-neutral-950 sm:text-[2.85rem] md:text-[3.15rem]">
+          <h2 className="text-[2.15rem] leading-[1.12] font-bold tracking-tight text-neutral-950 sm:text-[2.85rem] md:text-[3.15rem]">
             Lock your operating corridor before competitors pull the permit.
           </h2>
 
           <p className="mx-auto mt-4 max-w-2xl text-[15px] leading-relaxed text-neutral-600 sm:text-base">
-            To protect lead exclusivity and contractor margins, Depoii caps workspace access to a maximum of 2 commercial contractors per DFW zone. Test live pre-permit intelligence in your primary corridor with a 90-day pilot, or secure full metroplex exclusivity.
+            To protect lead exclusivity and contractor margins, Depoii caps workspace access to a{" "}
+            <span className="font-semibold text-neutral-950 bg-amber-100/80 border border-amber-300/80 px-2 py-0.5 rounded-md text-[14.5px] sm:text-[15.5px]">
+              maximum of 2 commercial contractors
+            </span>{" "}
+            per DFW zone. Test live pre-permit intelligence in your primary corridor with a 90-day pilot, or secure full metroplex exclusivity.
           </p>
         </div>
 

@@ -198,7 +198,7 @@ const properties: PropertyDeal[] = [
     ownerType: "Local Property Manager",
     headerPhoto: "/assets/aerials/carousel-prop-3.jpg",
     thumbnailPhoto: "/assets/aerials/carousel-prop-3.jpg",
-    satelliteImage: "/assets/aerials/exact-roof-split-hd.jpg",
+    satelliteImage: "/assets/aerials/exact-roof-split-alt.jpg",
     degradationRate: "+26% perimeter fatigue",
     thesis: [
       "17-yr ballasted EPDM with perimeter parapet flashing distress",
@@ -209,16 +209,6 @@ const properties: PropertyDeal[] = [
     dealThesisSummary:
       "High-probability replacement: parapet seam failure + DFW hail track + reachable local property manager.",
   },
-];
-
-const commercialRoofingPartners = [
-  { name: "CentiMark Commercial Roofing" },
-  { name: "Tecta America" },
-  { name: "Baker Roofing Co." },
-  { name: "Flynn Commercial Roofing Group" },
-  { name: "Nations Roof" },
-  { name: "Kalkreuth Roofing & Sheet Metal" },
-  { name: "Empire Roofing" },
 ];
 
 export function Hero() {
@@ -234,7 +224,7 @@ export function Hero() {
   useEffect(() => {
     const timer = setInterval(() => {
       setBadgeIndex((prev) => (prev + 1) % rotatingBadges.length);
-    }, 2400);
+    }, 1200);
     return () => clearInterval(timer);
   }, []);
 
@@ -309,7 +299,7 @@ export function Hero() {
         <h1 className="text-[36px] sm:text-[54px] lg:text-[70px] font-bold text-neutral-950 tracking-[-0.035em] leading-[1.12] max-w-[1100px] mx-auto">
           Where commercial roofers{" "}
           <span
-            className="inline-flex items-center gap-1.5 px-3.5 sm:px-5 py-0.5 sm:py-1 rounded-full transition-all duration-300 align-middle shadow-xs border"
+            className="inline-flex items-center gap-1.5 px-3.5 sm:px-5 py-0.5 sm:py-1 rounded-full transition-all duration-200 align-middle shadow-xs border"
             style={{
               backgroundColor: currentBadge.bg,
               color: currentBadge.text,
@@ -364,6 +354,28 @@ export function Hero() {
         {/* ========================================================= */}
         <div id="platform" className="relative mt-12 w-full max-w-[1140px] mx-auto scroll-mt-24">
           <div className="rounded-2xl border border-neutral-200 bg-white text-neutral-950 shadow-[0_20px_60px_rgba(0,0,0,0.06),0_1px_3px_rgba(0,0,0,0.04)] overflow-hidden text-left relative z-10">
+            {/* Mobile-Only Mid-UI Floating Prev / Next Navigation Arrows */}
+            <button
+              onClick={() =>
+                setActivePropertyIndex(
+                  (prev) => (prev - 1 + properties.length) % properties.length
+                )
+              }
+              aria-label="Previous property demo"
+              className="sm:hidden absolute left-2 top-1/2 -translate-y-1/2 z-30 w-9 h-9 rounded-full bg-white/95 backdrop-blur border border-neutral-300 text-neutral-900 shadow-lg flex items-center justify-center active:scale-95 transition-all"
+            >
+              <ChevronLeft className="w-5 h-5" />
+            </button>
+            <button
+              onClick={() =>
+                setActivePropertyIndex((prev) => (prev + 1) % properties.length)
+              }
+              aria-label="Next property demo"
+              className="sm:hidden absolute right-2 top-1/2 -translate-y-1/2 z-30 w-9 h-9 rounded-full bg-white/95 backdrop-blur border border-neutral-300 text-neutral-900 shadow-lg flex items-center justify-center active:scale-95 transition-all"
+            >
+              <ChevronRight className="w-5 h-5" />
+            </button>
+
             {/* ----------------- TOP BROWSER & TAB HEADER ----------------- */}
             <div className="h-10 px-3 bg-[#f8f9fa] border-b border-neutral-200 flex items-center justify-between select-none">
               {/* Left: macOS dots + Back/Forward chevrons + Active Tab */}
@@ -395,19 +407,14 @@ export function Hero() {
                 </button>
               </div>
 
-              {/* Right: Share, Comment, Favorite, Menu */}
-              <div className="flex items-center gap-3 text-[12px] text-neutral-500 shrink-0">
-                <button className="hover:text-neutral-950 font-medium transition-colors">Share</button>
-                <MessageSquare className="w-3.5 h-3.5 hover:text-neutral-950 cursor-pointer" />
-                <Star className="w-3.5 h-3.5 hover:text-neutral-950 cursor-pointer" />
-                <MoreHorizontal className="w-4 h-4 hover:text-neutral-950 cursor-pointer" />
-              </div>
+              {/* Empty placeholder or minimal clean finish */}
+              <div />
             </div>
 
             {/* ----------------- WORKSPACE BODY (SIDEBAR + MAIN) ----------------- */}
             <div className="flex flex-col lg:flex-row min-h-[580px]">
-              {/* ----------------- LEFT SIDEBAR ----------------- */}
-              <aside className="w-full lg:w-[190px] bg-[#fafaf9] border-r border-neutral-200 p-3 flex flex-col justify-between shrink-0">
+              {/* ----------------- LEFT SIDEBAR (Desktop Only) ----------------- */}
+              <aside className="hidden lg:flex lg:w-[190px] bg-[#fafaf9] border-r border-neutral-200 p-3 flex-col justify-between shrink-0">
                 <div className="space-y-4">
                   {/* Depoii Official Vortex Mark & Name */}
                   <div className="flex items-center gap-2 px-1 pt-0.5">
@@ -703,15 +710,8 @@ export function Hero() {
                       </div>
                     </div>
 
-                    {/* Matched Same-Roof Before/After Satellite Slider */}
-                    <div
-                      ref={sliderContainerRef}
-                      onMouseDown={onMouseDown}
-                      onTouchStart={onTouchStart}
-                      onTouchMove={onTouchMove}
-                      onTouchEnd={onTouchEnd}
-                      className="relative flex-1 min-h-[200px] sm:min-h-[220px] rounded-lg overflow-hidden select-none cursor-ew-resize border border-neutral-200 bg-neutral-50"
-                    >
+                    {/* Satellite Roof Image */}
+                    <div className="relative flex-1 min-h-[200px] sm:min-h-[220px] rounded-lg overflow-hidden select-none border border-neutral-200 bg-neutral-50">
                       {/* Exact Matched Same-Roof Comparison Photo */}
                       <div className="absolute inset-0 w-full h-full">
                         <Image
@@ -729,16 +729,6 @@ export function Hero() {
                       </div>
                       <div className="absolute bottom-2 right-2 z-10 px-2 py-0.5 rounded bg-black/80 backdrop-blur-xs text-white text-[10px] font-semibold tracking-tight shadow pointer-events-none">
                         2024 (Degradation)
-                      </div>
-
-                      {/* Draggable Divider Handle */}
-                      <div
-                        className="absolute top-0 bottom-0 z-20 w-0.5 bg-white shadow-[0_0_8px_rgba(0,0,0,0.5)]"
-                        style={{ left: `${sliderPosition}%` }}
-                      >
-                        <div className="absolute top-1/2 -translate-y-1/2 -translate-x-1/2 w-6 h-6 rounded-full bg-white text-neutral-900 shadow-md flex items-center justify-center font-bold text-[10px] border border-neutral-300 hover:scale-110 transition-transform">
-                          <span className="leading-none select-none tracking-tighter text-[11px]">‹›</span>
-                        </div>
                       </div>
                     </div>
 
@@ -861,7 +851,7 @@ export function Hero() {
           {/* ========================================================= */}
           <div className="mt-6 flex flex-col items-center">
             <div className="flex items-center justify-center gap-3 w-full">
-              {/* Previous button */}
+              {/* Previous button (Desktop / Tablet only) */}
               <button
                 onClick={() =>
                   setActivePropertyIndex(
@@ -869,7 +859,7 @@ export function Hero() {
                   )
                 }
                 aria-label="Previous commercial property"
-                className="w-8 h-8 rounded-full bg-white border border-neutral-200 hover:bg-neutral-50 text-neutral-700 shadow-2xs flex items-center justify-center transition-all active:scale-95 shrink-0"
+                className="hidden sm:flex w-8 h-8 rounded-full bg-white border border-neutral-200 hover:bg-neutral-50 text-neutral-700 shadow-2xs items-center justify-center transition-all active:scale-95 shrink-0"
               >
                 <ChevronLeft className="w-4 h-4" />
               </button>
@@ -926,13 +916,13 @@ export function Hero() {
                 })}
               </div>
 
-              {/* Next button */}
+              {/* Next button (Desktop / Tablet only) */}
               <button
                 onClick={() =>
                   setActivePropertyIndex((prev) => (prev + 1) % properties.length)
                 }
                 aria-label="Next commercial property"
-                className="w-8 h-8 rounded-full bg-white border border-neutral-200 hover:bg-neutral-50 text-neutral-700 shadow-2xs flex items-center justify-center transition-all active:scale-95 shrink-0"
+                className="hidden sm:flex w-8 h-8 rounded-full bg-white border border-neutral-200 hover:bg-neutral-50 text-neutral-700 shadow-2xs items-center justify-center transition-all active:scale-95 shrink-0"
               >
                 <ChevronRight className="w-4 h-4" />
               </button>
@@ -953,23 +943,6 @@ export function Hero() {
                 />
               ))}
             </div>
-          </div>
-        </div>
-
-        {/* Commercial Roofing Trust Proof / Partner Row */}
-        <div className="mt-16 w-full max-w-[1100px] border-t border-neutral-200 pt-8">
-          <p className="text-[12px] text-neutral-500 font-semibold tracking-wider uppercase">
-            Trusted by leaders at top commercial roofing enterprises &amp; restoration teams
-          </p>
-          <div className="mt-5 flex flex-wrap items-center justify-center gap-6 sm:gap-10 opacity-70">
-            {commercialRoofingPartners.map((partner, idx) => (
-              <div
-                key={idx}
-                className="text-[13px] sm:text-[14px] font-bold text-neutral-700 hover:text-neutral-950 hover:opacity-100 transition-opacity tracking-tight"
-              >
-                {partner.name}
-              </div>
-            ))}
           </div>
         </div>
       </div>
