@@ -4,10 +4,12 @@ import { LeadPipelineFinder } from "@/components/LeadPipelineFinder";
 // import { Testimonials } from "@/components/Testimonials";
 import { CTASection } from "@/components/CTASection";
 import { Footer } from "@/components/Footer";
+import { VisitorTracker } from "@/components/VisitorTracker";
 
 export default function Home() {
   return (
     <main className="min-h-screen bg-white">
+      <VisitorTracker />
       <Navbar />
       <Hero />
       <LeadPipelineFinder />

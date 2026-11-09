@@ -3,6 +3,7 @@
 import React, { useState } from "react";
 import { Check, X, Mail, ShieldCheck, ArrowRight } from "lucide-react";
 import { DepoiiMark } from "./DepoiiLogo";
+import { getOrCreateVisitorId, logVisitorEvent } from "./VisitorTracker";
 
 export const DALLAS_ZONES = [
   {
@@ -102,6 +103,9 @@ export function CTASection() {
     setSubmitted(false);
     setError("");
     setModalOpen(true);
+    logVisitorEvent("form_intent", {
+      actionDetail: plan === "pilot" ? "Opened Single-Zone Pilot Application" : "Opened Enterprise Concession Briefing",
+    });
   };
 
   const handleEmailNext = async (e: React.FormEvent) => {
@@ -117,11 +121,14 @@ export function CTASection() {
         ? `Single-Zone Pilot (${billingCycle === "3month" ? "$349/mo" : "$549/mo"})`
         : "Enterprise Concession";
 
+    const visitorId = getOrCreateVisitorId();
+
     // Step 1 Partial Capture to alert via email
     fetch("/api/pilot", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
+        visitorId,
         email: email.trim(),
         isPartial: true,
         source: `${planLabel} - Step 1 Partial Capture`,
@@ -142,7 +149,10 @@ export function CTASection() {
         ? `Single-Zone Pilot (${billingCycle === "3month" ? "$349/mo (3-Month Commitment)" : "$549 (1-Month Run)"})`
         : "Enterprise Concession";
 
+    const visitorId = getOrCreateVisitorId();
+
     const payload = {
+      visitorId,
       email: email.trim(),
       name: name.trim() || "Commercial Contractor",
       company: company.trim() || "Commercial Roofing Contractor",

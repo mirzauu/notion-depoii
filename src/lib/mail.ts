@@ -11,6 +11,7 @@ export async function sendMail(input: {
   html?: string;
   replyTo?: string;
   fromName?: string;
+  visitorId?: string; // Used for thread conversation binding
 }) {
   const smtpHost = process.env.SMTP_HOST;
   const smtpUser = process.env.SMTP_USER;
@@ -26,13 +27,23 @@ export async function sendMail(input: {
     auth: { user: smtpUser, pass: smtpPass },
   });
 
+  const headers: Record<string, string> = {};
+
+  // Standard RFC email threading headers to bundle all events for a visitor into one thread
+  if (input.visitorId) {
+    const threadRootId = `<visitor-${input.visitorId}@depoii.com>`;
+    headers["Message-ID"] = `<evt-${Date.now()}-${Math.random().toString(36).slice(2, 7)}@depoii.com>`;
+    headers["In-Reply-To"] = threadRootId;
+    headers["References"] = threadRootId;
+  }
+
   await transporter.sendMail({
-    from: `"${input.fromName || "Depoii"}" <${smtpUser}>`,
+    from: `"${input.fromName || "Depoii Radar"}" <${smtpUser}>`,
     to: input.to,
     replyTo: input.replyTo,
     subject: input.subject,
     text: input.text,
     html: input.html,
+    headers,
   });
 }
-
