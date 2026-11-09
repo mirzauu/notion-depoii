@@ -52,10 +52,11 @@ export function logVisitorEvent(
 
 export function VisitorTracker() {
   const dwellReportedRef = useRef<{ [seconds: number]: boolean }>({});
-  const startTimeRef = useRef<number>(Date.now());
+  const startTimeRef = useRef<number>(0);
 
   useEffect(() => {
     if (typeof window === "undefined") return;
+    startTimeRef.current = Date.now();
 
     // 1. Check & increment visit count if new session
     const isSessionPinged = sessionStorage.getItem(SESSION_PING_KEY);
@@ -104,3 +105,4 @@ export function VisitorTracker() {
 
   return null;
 }
+

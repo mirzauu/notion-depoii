@@ -4,20 +4,20 @@ export const dynamic = "force-dynamic";
 
 export async function POST(req: Request) {
   try {
-    const body = (await req.json().catch(() => ({}))) as Record<string, any>;
-    const email = (body.email || "").trim();
+    const body = (await req.json().catch(() => ({}))) as Record<string, unknown>;
+    const email = (typeof body.email === "string" ? body.email : "").trim();
 
     if (!email || !email.includes("@")) {
       return Response.json({ error: "A valid email is required." }, { status: 400 });
     }
 
-    const visitorId = (body.visitorId || "").trim();
+    const visitorId = (typeof body.visitorId === "string" ? body.visitorId : "").trim();
     const isPartial = Boolean(body.isPartial);
-    const name = (body.name || (isPartial ? "Partial Lead (Step 1)" : "Commercial Contractor")).trim();
-    const company = (body.company || (isPartial ? "Incomplete Form" : "Commercial Roofing Contractor")).trim();
-    const territory = (body.territory || "Dallas–Fort Worth, TX").trim();
-    const sizeRange = (body.sizeRange || (isPartial ? "Pending Step 2" : "Commercial 25k+ sq ft")).trim();
-    const source = (body.source || "Landing Page Cohort Pricing").trim();
+    const name = (typeof body.name === "string" ? body.name : isPartial ? "Partial Lead (Step 1)" : "Commercial Contractor").trim();
+    const company = (typeof body.company === "string" ? body.company : isPartial ? "Incomplete Form" : "Commercial Roofing Contractor").trim();
+    const territory = (typeof body.territory === "string" ? body.territory : "Dallas–Fort Worth, TX").trim();
+    const sizeRange = (typeof body.sizeRange === "string" ? body.sizeRange : isPartial ? "Pending Step 2" : "Commercial 25k+ sq ft").trim();
+    const source = (typeof body.source === "string" ? body.source : "Landing Page Cohort Pricing").trim();
 
     console.log("[pilot] Received submission:", {
       visitorId,

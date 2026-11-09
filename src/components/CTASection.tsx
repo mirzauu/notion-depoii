@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
-import { Check, X, Mail, ShieldCheck, ArrowRight } from "lucide-react";
+import { Check, X, Mail, ArrowRight } from "lucide-react";
 import { DepoiiMark } from "./DepoiiLogo";
 import { getOrCreateVisitorId, logVisitorEvent } from "./VisitorTracker";
 
