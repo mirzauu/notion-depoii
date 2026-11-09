@@ -31,7 +31,7 @@ export async function POST(req: Request) {
       timestamp: new Date().toISOString(),
     });
 
-    const notifyTo = process.env.PILOT_NOTIFY_EMAIL || "mirzamailbox0@gmail.com";
+    const notifyTo = process.env.PILOT_NOTIFY_EMAIL || "";
 
     if (smtpConfigured() && notifyTo) {
       try {

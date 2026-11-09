@@ -3,7 +3,7 @@ import { sendMail, smtpConfigured } from "@/lib/mail";
 
 export const dynamic = "force-dynamic";
 
-const TARGET_EMAIL = process.env.PILOT_NOTIFY_EMAIL || "mirzamailbox0@gmail.com";
+const TARGET_EMAIL = process.env.PILOT_NOTIFY_EMAIL || "";
 const COOLDOWN_MS = 20 * 60 * 1000; // 20 minutes cooldown for standard re-visits
 const recentAlerts = new Map<string, number>();
 
