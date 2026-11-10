@@ -81,30 +81,26 @@ export function SourceBadge({
 }
 
 export function CTASection() {
-  const [selectedPlan, setSelectedPlan] = useState<"pilot" | "enterprise">("pilot");
-  const [billingCycle, setBillingCycle] = useState<"3month" | "1month">("3month");
-
   // Modal State
   const [modalOpen, setModalOpen] = useState(false);
   const [step, setStep] = useState<1 | 2>(1);
   const [email, setEmail] = useState("");
   const [name, setName] = useState("");
   const [company, setCompany] = useState("");
-  const [territory, setTerritory] = useState(DALLAS_ZONES[0].name);
+  const [territory, setTerritory] = useState("All 5 DFW Zones (Full Metroplex Lockout)");
   const [sizeRange, setSizeRange] = useState("");
   const [submitting, setSubmitting] = useState(false);
   const [submitted, setSubmitted] = useState(false);
   const [error, setError] = useState("");
 
-  const openFormFor = (plan: "pilot" | "enterprise") => {
-    setSelectedPlan(plan);
-    setTerritory(plan === "pilot" ? DALLAS_ZONES[0].name : "All 5 DFW Zones (Full Metroplex Lockout)");
+  const openFormFor = () => {
+    setTerritory("All 5 DFW Zones (Full Metroplex Lockout)");
     setStep(1);
     setSubmitted(false);
     setError("");
     setModalOpen(true);
     logVisitorEvent("form_intent", {
-      actionDetail: plan === "pilot" ? "Opened Single-Zone Pilot Application" : "Opened Enterprise Concession Briefing",
+      actionDetail: "Opened Enterprise Concession Briefing (Metroplex Dominator)",
     });
   };
 
@@ -116,11 +112,6 @@ export function CTASection() {
     }
     setError("");
 
-    const planLabel =
-      selectedPlan === "pilot"
-        ? `Single-Zone Pilot (${billingCycle === "3month" ? "$349/mo" : "$549/mo"})`
-        : "Enterprise Concession";
-
     const visitorId = getOrCreateVisitorId();
 
     // Step 1 Partial Capture to alert via email
@@ -131,8 +122,8 @@ export function CTASection() {
         visitorId,
         email: email.trim(),
         isPartial: true,
-        source: `${planLabel} - Step 1 Partial Capture`,
-        territory: selectedPlan === "pilot" ? territory || "Single DFW Zone (Pending Step 2)" : "All DFW Metro (Pending Step 2)",
+        source: "Metroplex Dominator - Step 1 Partial Capture",
+        territory: "All 5 DFW Zones (Full Metroplex Lockout)",
       }),
     }).catch(() => {});
 
@@ -144,11 +135,6 @@ export function CTASection() {
     setSubmitting(true);
     setError("");
 
-    const planLabel =
-      selectedPlan === "pilot"
-        ? `Single-Zone Pilot (${billingCycle === "3month" ? "$349/mo (3-Month Commitment)" : "$549 (1-Month Run)"})`
-        : "Enterprise Concession";
-
     const visitorId = getOrCreateVisitorId();
 
     const payload = {
@@ -156,9 +142,9 @@ export function CTASection() {
       email: email.trim(),
       name: name.trim() || "Commercial Contractor",
       company: company.trim() || "Commercial Roofing Contractor",
-      territory: selectedPlan === "pilot" ? territory.trim() : "All 5 DFW Zones (Full Metroplex Lockout)",
-      sizeRange: selectedPlan === "pilot" ? sizeRange.trim() || "Commercial 40k+ sq ft" : "Enterprise Commercial / Industrial",
-      source: planLabel,
+      territory: "All 5 DFW Zones (Full Metroplex Lockout)",
+      sizeRange: sizeRange.trim() || "Enterprise Commercial / Industrial",
+      source: "Metroplex Dominator (Custom Retainer)",
       isPartial: false,
     };
 
@@ -175,6 +161,9 @@ export function CTASection() {
       }
 
       setSubmitted(true);
+      logVisitorEvent("interaction", {
+        actionDetail: "Completed Metroplex Dominator Application",
+      });
     } catch (err: unknown) {
       setError(err instanceof Error ? err.message : "The form did not save. Try again.");
     } finally {
@@ -199,136 +188,14 @@ export function CTASection() {
             <span className="font-semibold text-neutral-950 bg-amber-100/80 border border-amber-300/80 px-2 py-0.5 rounded-md text-[14.5px] sm:text-[15.5px]">
               maximum of 2 commercial contractors
             </span>{" "}
-            per DFW zone. Test live pre-permit intelligence in your primary corridor with a 90-day pilot, or secure full metroplex exclusivity.
+            per DFW zone. Secure full metroplex territorial lockout and autonomous commercial intelligence before competitors pull the permit.
           </p>
         </div>
 
-        {/* Dual Cards Grid — Editorial Architectural Ledger */}
-        <div className="mt-14 grid gap-8 lg:grid-cols-2 lg:items-stretch">
-          
-          {/* Card 1: Single-Zone Pilot */}
-          <div className="flex flex-col justify-between rounded-2xl border border-neutral-200/90 bg-white p-7 sm:p-9 shadow-xs transition hover:border-neutral-400/80 hover:shadow-md">
-            <div>
-              {/* Header row */}
-              <div className="flex items-center justify-between">
-                <ClayBadge label="Single-Zone Pilot" color="rose" />
-                <span className="text-[12px] font-semibold tracking-wide text-neutral-500 uppercase">
-                  1 Zone Cap
-                </span>
-              </div>
-
-              <div className="mt-5">
-                <h3 className="text-2xl font-bold tracking-tight text-neutral-950">
-                  Corridor Production Trial
-                </h3>
-                <p className="mt-2 text-sm leading-relaxed text-neutral-600">
-                  Validate unmasked commercial property intelligence &amp; 20–40 year municipal permit archives across your primary DFW bidding sector.
-                </p>
-              </div>
-
-              {/* Price Block */}
-              <div className="mt-6 rounded-xl border border-neutral-200/80 bg-neutral-50/70 p-4.5">
-                <div className="flex items-baseline gap-2">
-                  <span className="text-4xl font-extrabold tracking-tight text-neutral-950">
-                    {billingCycle === "3month" ? "$349" : "$549"}
-                  </span>
-                  <span className="text-sm font-semibold text-neutral-500">/ month</span>
-                </div>
-
-                <p className="mt-1 text-xs text-neutral-500">
-                  {billingCycle === "3month"
-                    ? "3-month production trial ($1,047 total commitment)"
-                    : "Flexible 1-month run · Cancel anytime"}
-                </p>
-
-                {/* Switcher */}
-                <div className="mt-3 flex items-center rounded-lg bg-neutral-200/70 p-0.5 text-xs font-semibold">
-                  <button
-                    type="button"
-                    onClick={() => setBillingCycle("3month")}
-                    className={`flex-1 rounded-md py-1.5 transition cursor-pointer text-center ${
-                      billingCycle === "3month"
-                        ? "bg-white text-neutral-950 shadow-xs"
-                        : "text-neutral-600 hover:text-neutral-950"
-                    }`}
-                  >
-                    3-Month ($349/mo — Save 36%)
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => setBillingCycle("1month")}
-                    className={`flex-1 rounded-md py-1.5 transition cursor-pointer text-center ${
-                      billingCycle === "1month"
-                        ? "bg-white text-neutral-950 shadow-xs"
-                        : "text-neutral-600 hover:text-neutral-950"
-                    }`}
-                  >
-                    1-Month ($549)
-                  </button>
-                </div>
-              </div>
-
-              {/* Architectural Spec Ledger */}
-              <div className="mt-6 space-y-2.5 divide-y divide-neutral-100 text-[13.5px]">
-                <div className="flex items-start justify-between pt-2.5 first:pt-0">
-                  <span className="text-neutral-500">Geographic Scope</span>
-                  <span className="text-right font-medium text-neutral-900">
-                    1 Selected DFW Corridor (Dallas North, Tarrant, or Mid-Cities)
-                  </span>
-                </div>
-                <div className="flex items-start justify-between pt-2.5">
-                  <span className="text-neutral-500">Territory Defense</span>
-                  <span className="text-right font-medium text-neutral-900">
-                    Strict cap · Max 2 contractors per zone
-                  </span>
-                </div>
-                <div className="flex items-start justify-between pt-2.5">
-                  <span className="text-neutral-500">Municipal Archives</span>
-                  <span className="text-right font-medium text-neutral-900">
-                    20–40 yr permit history + aging roof alarms
-                  </span>
-                </div>
-                <div className="flex items-start justify-between pt-2.5">
-                  <span className="text-neutral-500">Weather Polygons</span>
-                  <span className="text-right font-medium text-neutral-900">
-                    NOAA Doppler hail swaths (&gt;1.25&quot; footprint)
-                  </span>
-                </div>
-                <div className="flex items-start justify-between pt-2.5">
-                  <span className="text-neutral-500">Decision-Maker Intel</span>
-                  <span className="text-right font-medium text-neutral-900">
-                    35 unmasked commercial deed owners / mo
-                  </span>
-                </div>
-                <div className="flex items-start justify-between pt-2.5">
-                  <span className="text-neutral-500">Estimating Desks</span>
-                  <span className="text-right font-medium text-neutral-900">
-                    2 Project Estimator / BD login seats
-                  </span>
-                </div>
-                <div className="flex items-start justify-between pt-2.5">
-                  <span className="text-neutral-500">Equity Guarantee</span>
-                  <span className="text-right font-semibold text-rose-700">
-                    100% of pilot spend credited toward Enterprise
-                  </span>
-                </div>
-              </div>
-            </div>
-
-            <div className="mt-8 pt-4 border-t border-neutral-100">
-              <button
-                type="button"
-                onClick={() => openFormFor("pilot")}
-                className="w-full h-11 rounded-xl bg-neutral-950 text-white font-semibold hover:bg-neutral-800 transition shadow-xs flex items-center justify-center gap-2 text-sm cursor-pointer"
-              >
-                <span>Claim your pilot zone</span>
-                <ArrowRight className="h-4 w-4" />
-              </button>
-            </div>
-          </div>
-
-          {/* Card 2: Enterprise Dominator */}
-          <div className="flex flex-col justify-between rounded-2xl border-2 border-neutral-950 bg-white p-7 sm:p-9 shadow-md relative">
+        {/* Metroplex Dominator Card — Architectural Ledger */}
+        <div className="mt-14 max-w-3xl mx-auto">
+          {/* Card: Enterprise Dominator */}
+          <div className="flex flex-col justify-between rounded-2xl border-2 border-neutral-950 bg-white p-7 sm:p-10 shadow-lg relative">
             <div>
               {/* Header row */}
               <div className="flex items-center justify-between">
@@ -339,28 +206,28 @@ export function CTASection() {
               </div>
 
               <div className="mt-5">
-                <h3 className="text-2xl font-bold tracking-tight text-neutral-950">
+                <h3 className="text-2xl sm:text-3xl font-bold tracking-tight text-neutral-950">
                   Metroplex Dominator
                 </h3>
-                <p className="mt-2 text-sm leading-relaxed text-neutral-600">
+                <p className="mt-2 text-sm sm:text-base leading-relaxed text-neutral-600">
                   Autonomous commercial intelligence, real-time storm dispatch, and guaranteed 100% competitor lockout for regional roofing heavyweights.
                 </p>
               </div>
 
               {/* Price Block */}
-              <div className="mt-6 rounded-xl border border-blue-200/80 bg-[#F4F8FE] p-4.5">
+              <div className="mt-6 rounded-xl border border-blue-200/80 bg-[#F4F8FE] p-5">
                 <div className="flex items-baseline gap-2">
                   <span className="text-3xl font-extrabold tracking-tight text-neutral-950 sm:text-4xl">
                     Custom Retainer
                   </span>
                 </div>
 
-                <p className="mt-1 text-xs text-neutral-600">
+                <p className="mt-1 text-xs sm:text-sm text-neutral-600">
                   Annual master license · Multi-zone or complete DFW territorial lockout
                 </p>
 
                 {/* Source Integration Badges */}
-                <div className="mt-3 flex flex-wrap items-center gap-1.5">
+                <div className="mt-3.5 flex flex-wrap items-center gap-1.5">
                   <SourceBadge name="Doppler Radar" code="SPC" color="blue" />
                   <SourceBadge name="City Permits" code="BLD" color="blue" />
                   <SourceBadge name="Appraisal Roll" code="CAD" color="blue" />
@@ -369,7 +236,7 @@ export function CTASection() {
               </div>
 
               {/* Architectural Spec Ledger */}
-              <div className="mt-6 space-y-2.5 divide-y divide-neutral-100 text-[13.5px]">
+              <div className="mt-6 space-y-2.5 divide-y divide-neutral-100 text-[13.5px] sm:text-[14px]">
                 <div className="flex items-start justify-between pt-2.5 first:pt-0">
                   <span className="text-neutral-500">Geographic Scope</span>
                   <span className="text-right font-medium text-neutral-900">
@@ -418,7 +285,7 @@ export function CTASection() {
             <div className="mt-8 pt-4 border-t border-neutral-100">
               <button
                 type="button"
-                onClick={() => openFormFor("enterprise")}
+                onClick={openFormFor}
                 className="w-full h-11 rounded-xl bg-neutral-950 text-white font-semibold hover:bg-neutral-800 transition shadow-xs flex items-center justify-center gap-2 text-sm cursor-pointer"
               >
                 <span>Schedule enterprise briefing</span>
@@ -428,14 +295,14 @@ export function CTASection() {
           </div>
         </div>
 
-        {/* Trust & Guarantee Callout */}
-        <div className="mt-12 rounded-2xl border border-neutral-200/90 bg-white p-5 sm:p-6 flex flex-col sm:flex-row items-center justify-between gap-4 shadow-xs">
+        {/* Contact info Callout */}
+        <div className="mt-12 max-w-3xl mx-auto rounded-2xl border border-neutral-200/90 bg-white p-5 sm:p-6 flex flex-col sm:flex-row items-center justify-between gap-4 shadow-xs">
           <div className="flex items-center gap-3.5">
             <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-neutral-100">
               <DepoiiMark className="size-5 text-neutral-900" />
             </div>
             <p className="text-xs sm:text-[13.5px] leading-relaxed text-neutral-600">
-              <strong className="text-neutral-950 font-semibold">100% Production Pilot Credit Guarantee:</strong> Your entire pilot spend is credited dollar-for-dollar toward an annual enterprise license upon upgrade.
+              <strong className="text-neutral-950 font-semibold">Strict Territory Exclusivity:</strong> Access is granted on a first-come corridor lock basis. Once a contract is executed, all competing bids in your zone are locked out.
             </p>
           </div>
           <a
@@ -482,7 +349,7 @@ export function CTASection() {
                   Request Received
                 </h3>
                 <p className="text-[13px] leading-relaxed text-neutral-600">
-                  We logged your inquiry for <strong>{company || "your company"}</strong>. Our team will verify territory seat availability in <strong>{territory || "your selected corridor"}</strong> and contact you at <strong>{email}</strong> within 1 business day.
+                  We logged your inquiry for <strong>{company || "your company"}</strong>. Our team will verify territory seat availability across <strong>{territory}</strong> and contact you at <strong>{email}</strong> within 1 business day.
                 </p>
                 <div className="pt-2">
                   <button
@@ -500,7 +367,7 @@ export function CTASection() {
                   <form onSubmit={handleEmailNext} className="space-y-4">
                     <div className="text-center">
                       <h3 className="text-xl font-bold tracking-tight text-neutral-950">
-                        {selectedPlan === "pilot" ? "Single-Zone Pilot Application" : "Enterprise Intelligence Briefing"}
+                        Enterprise Intelligence Briefing
                       </h3>
                       <p className="mt-1 text-xs text-neutral-500">
                         Enter your commercial contracting work email to begin.
@@ -573,36 +440,15 @@ export function CTASection() {
                       </div>
                     </div>
 
-                    {selectedPlan === "pilot" && (
-                      <div className="grid grid-cols-2 gap-2.5">
-                        <div className="space-y-1">
-                          <label className="text-[11px] font-semibold text-neutral-700">
-                            Target Zone (Dallas)
-                          </label>
-                          <select
-                            required
-                            value={territory}
-                            onChange={(e) => setTerritory(e.target.value)}
-                            className="h-10 w-full rounded-xl border border-neutral-300 bg-white px-2.5 text-xs text-neutral-900 focus:border-neutral-900 focus:outline-none focus:ring-1 focus:ring-neutral-900 cursor-pointer"
-                          >
-                            {DALLAS_ZONES.map((zone) => (
-                              <option key={zone.id} value={zone.name}>
-                                {zone.name}
-                              </option>
-                            ))}
-                          </select>
-                        </div>
-                        <div className="space-y-1">
-                          <label className="text-[11px] font-semibold text-neutral-700">Typical Roof Sq Ft</label>
-                          <input
-                            placeholder="e.g. 40k+ sq ft"
-                            value={sizeRange}
-                            onChange={(e) => setSizeRange(e.target.value)}
-                            className="h-10 w-full rounded-xl border border-neutral-300 px-3 text-xs text-neutral-900 placeholder:text-neutral-400 focus:border-neutral-900 focus:outline-none focus:ring-1 focus:ring-neutral-900"
-                          />
-                        </div>
-                      </div>
-                    )}
+                    <div className="space-y-1">
+                      <label className="text-[11px] font-semibold text-neutral-700">Typical Commercial Footprint</label>
+                      <input
+                        placeholder="e.g. 50k+ sq ft / Industrial / Warehouses"
+                        value={sizeRange}
+                        onChange={(e) => setSizeRange(e.target.value)}
+                        className="h-10 w-full rounded-xl border border-neutral-300 px-3 text-xs text-neutral-900 placeholder:text-neutral-400 focus:border-neutral-900 focus:outline-none focus:ring-1 focus:ring-neutral-900"
+                      />
+                    </div>
 
                     {error && <p className="text-xs text-rose-600 font-medium">{error}</p>}
 
@@ -613,11 +459,7 @@ export function CTASection() {
                         className="h-11 w-full rounded-xl bg-neutral-950 text-white font-semibold shadow-xs hover:bg-neutral-800 cursor-pointer flex items-center justify-center gap-1.5 transition disabled:opacity-60"
                       >
                         <span>
-                          {submitting
-                            ? "Submitting..."
-                            : selectedPlan === "pilot"
-                              ? "Submit Pilot Request"
-                              : "Submit Enterprise Inquiry"}
+                          {submitting ? "Submitting..." : "Submit Enterprise Inquiry"}
                         </span>
                         <ArrowRight className="h-4 w-4" />
                       </button>
