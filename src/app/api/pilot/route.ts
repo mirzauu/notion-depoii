@@ -1,4 +1,4 @@
-import { sendMail, smtpConfigured } from "@/lib/mail";
+import { isLocalRuntime, sendMail, smtpConfigured } from "@/lib/mail";
 
 export const dynamic = "force-dynamic";
 
@@ -33,13 +33,15 @@ export async function POST(req: Request) {
 
     const notifyTo = process.env.PILOT_NOTIFY_EMAIL || "";
 
-    if (smtpConfigured() && notifyTo) {
+    if (!isLocalRuntime(req) && smtpConfigured() && notifyTo) {
       try {
         const shortId = visitorId ? `#${visitorId.slice(0, 8)}` : "";
         const locationStr = "Dallas–Fort Worth, TX";
 
+        const isDemo = source.toLowerCase().includes("demo");
+
         if (isPartial) {
-          // Instant alert in the visitor's thread when email is typed & Next is clicked
+          // Instant alert in the visitor's thread when email is typed
           await sendMail({
             to: notifyTo,
             replyTo: email,
@@ -47,18 +49,17 @@ export async function POST(req: Request) {
             subject: visitorId ? `[Visitor Radar] ${shortId} · ${locationStr}` : `⚡ [Step 1 Lead Captured] ${email}`,
             visitorId: visitorId || undefined, // Threads into the same visitor conversation!
             text: [
-              `⚠️ [Step 1 Email Captured] ${email} (${source})`,
+              `⚠️ [Email Captured] ${email} (${source})`,
               `Visitor ID: ${visitorId || "Unknown"}`,
-              `A prospective contractor entered their email and clicked 'Next'.`,
-              `If they leave without finishing Step 2, you can follow up with them immediately.`,
-              `Email: ${email}`,
+              `A contractor typed their email into the ${isDemo ? "Live Demo Preview Modal" : "Application Form"}.`,
+              `Follow up immediately: ${email}`,
               `Timestamp: ${new Date().toISOString()}`,
             ].join("\n"),
             html: `
               <div style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; max-width: 580px; margin: 0 auto; padding: 20px; border: 2px solid #f59e0b; border-radius: 12px; background-color: #fffbeb;">
                 <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px;">
                   <span style="background-color: #f59e0b; color: #ffffff; padding: 4px 10px; border-radius: 20px; font-size: 12px; font-weight: 700;">
-                    ⚡ Step 1 Lead Captured (Partial)
+                    ${isDemo ? "⚡ Demo Email Captured" : "⚡ Step 1 Lead Captured (Partial)"}
                   </span>
                   <span style="font-size: 11px; color: #92400e; font-family: monospace;">ID: ${shortId}</span>
                 </div>
@@ -66,12 +67,95 @@ export async function POST(req: Request) {
                   Contractor entered email: <a href="mailto:${email}" style="color: #b45309; text-decoration: underline;">${email}</a>
                 </h3>
                 <p style="margin: 0; font-size: 13px; color: #92400e; line-height: 1.4;">
-                  Tier selected: <strong>${source}</strong>. Territory target: <strong>${territory}</strong>.<br/>
-                  If this user abandons the form before Step 2, you have their verified email ready for follow-up.
+                  Source: <strong>${source}</strong>.<br/>
+                  Contractor typed this into the ${isDemo ? "Navbar Live Demo modal" : "cohort checkout"}. Reach out to lock in their walkthrough.
                 </p>
               </div>
             `,
           });
+        } else if (isDemo) {
+          // Specialized High-Value Live Demo Request Alert
+          await sendMail({
+            to: notifyTo,
+            replyTo: email,
+            fromName: "Depoii Demo Radar",
+            subject: visitorId ? `[Visitor Radar] ${shortId} · ${locationStr}` : `🎯 [Live Demo Request] ${email}`,
+            visitorId: visitorId || undefined,
+            text: [
+              `🎯 [Live Demo Request] ${email}`,
+              `Origin: Navbar Software Preview Modal`,
+              `Territory Zone: ${territory}`,
+              `Visitor ID: ${visitorId}`,
+              `Contractor Promise: Our team will contact you in 24 hours.`,
+              `Submitted: ${new Date().toISOString()}`,
+            ].join("\n"),
+            html: `
+              <div style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; max-width: 580px; margin: 0 auto; padding: 22px; border: 2px solid #FF9C6D; border-radius: 14px; background-color: #ffffff;">
+                <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 14px; border-bottom: 1px solid #f3f4f6; padding-bottom: 12px;">
+                  <span style="background-color: #191918; color: #ffffff; padding: 5px 12px; border-radius: 20px; font-size: 12px; font-weight: 700; display: inline-flex; items-center; gap: 6px;">
+                    🎯 Live Demo Requested (24hr SLA)
+                  </span>
+                  <span style="font-size: 11px; color: #6b7280; font-family: monospace;">ID: ${shortId}</span>
+                </div>
+                <h2 style="margin: 0 0 10px 0; color: #111827; font-size: 20px;">
+                  Contractor requested a live software walkthrough
+                </h2>
+                <p style="margin: 0 0 16px 0; font-size: 14px; color: #4b5563; line-height: 1.5;">
+                  The contractor viewed the Depoii software preview in the modal and submitted their email. They have been informed: <strong>"Our team will contact you in 24 hours."</strong>
+                </p>
+                <div style="background-color: #fafaf9; border: 1px solid #e5e7eb; border-radius: 10px; padding: 14px; margin-bottom: 16px;">
+                  <table style="width: 100%; border-collapse: collapse; font-size: 13px;">
+                    <tbody>
+                      <tr>
+                        <td style="padding: 6px 0; color: #6b7280; font-weight: 600; width: 130px;">Email:</td>
+                        <td style="padding: 6px 0; color: #111827;"><a href="mailto:${email}" style="color: #111827; font-weight: 700; text-decoration: underline;">${email}</a></td>
+                      </tr>
+                      <tr>
+                        <td style="padding: 6px 0; color: #6b7280; font-weight: 600;">Target Territory:</td>
+                        <td style="padding: 6px 0; color: #111827; font-weight: 600;">Dallas–Fort Worth, TX (12,400+ roofs)</td>
+                      </tr>
+                      <tr>
+                        <td style="padding: 6px 0; color: #6b7280; font-weight: 600;">Lockout Status:</td>
+                        <td style="padding: 6px 0; color: #b45309; font-weight: 600;">Held for 24 Hours</td>
+                      </tr>
+                      <tr>
+                        <td style="padding: 6px 0; color: #6b7280; font-weight: 600;">Follow-up Window:</td>
+                        <td style="padding: 6px 0; color: #047857; font-weight: 700;">Within 24 Hours</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+                <p style="margin: 0; font-size: 12px; color: #9ca3af;">
+                  Depoii Commercial Intelligence System · Automated territory alert
+                </p>
+              </div>
+            `,
+          });
+
+          // Send confirmation to the applicant
+          try {
+            await sendMail({
+              to: email,
+              replyTo: notifyTo,
+              fromName: "Depoii Team",
+              subject: "Depoii Live Demo Request Confirmed",
+              text: [
+                `Hello,`,
+                ``,
+                `Thank you for requesting a live walkthrough of the Depoii Commercial Roofing Intelligence platform.`,
+                ``,
+                `We have received your request for ${email}. A Dallas–Fort Worth commercial intelligence specialist will contact you within 24 hours to schedule your walkthrough and verify unpermitted reroof opportunities in your primary territory corridor.`,
+                ``,
+                `Your corridor lockout availability is temporarily held for 24 hours.`,
+                ``,
+                `Best regards,`,
+                `The Depoii Team`,
+                `hello@depoii.com`,
+              ].join("\n"),
+            });
+          } catch (replyErr) {
+            console.warn("[pilot] Could not send confirmation to user:", replyErr);
+          }
         } else {
           // Full completion alert (also nested in the same thread!)
           await sendMail({

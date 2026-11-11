@@ -18,7 +18,7 @@ export function Footer() {
               <span className="font-bold text-[1.3rem] tracking-tight text-neutral-950">Depoii</span>
             </Link>
             <p className="text-[14px] text-neutral-600 max-w-sm leading-relaxed">
-              Commercial Roof Intelligence for Dallas–Fort Worth contractors. Pinpoint $250k+ commercial replacements before permits are pulled.
+              Commercial roofing intelligence for Dallas–Fort Worth. Roof age, severe storm history, and verified decision makers mapped across 12,400+ properties.
             </p>
             <div className="pt-1 flex items-center gap-2 text-[14px]">
               <Mail className="w-4 h-4 text-neutral-400" />
@@ -36,13 +36,18 @@ export function Footer() {
             <h4 className="text-[13px] font-bold text-neutral-900 uppercase tracking-wider">Navigation</h4>
             <ul className="space-y-2.5 text-[14px] text-neutral-600">
               <li>
+                <Link href="#intelligence" prefetch={false} className="hover:text-neutral-950 transition-colors">
+                  How Depoii Thinks
+                </Link>
+              </li>
+              <li>
                 <Link href="#platform" prefetch={false} className="hover:text-neutral-950 transition-colors">
-                  Interactive Platform
+                  Interactive Dossier
                 </Link>
               </li>
               <li>
                 <Link href="#pipeline-finder" prefetch={false} className="hover:text-neutral-950 transition-colors">
-                  DFW Commercial Territories
+                  DFW Flagged Properties
                 </Link>
               </li>
               <li>
@@ -51,8 +56,8 @@ export function Footer() {
                 </Link>
               </li>
               <li>
-                <Link href="https://app.depoii.com" prefetch={false} className="hover:text-neutral-950 transition-colors">
-                  Contractor Log In →
+                <Link href="#faq" prefetch={false} className="hover:text-neutral-950 transition-colors">
+                  Frequently Asked Questions
                 </Link>
               </li>
             </ul>
@@ -60,15 +65,15 @@ export function Footer() {
 
           {/* Verified Public Sources & Exclusivity */}
           <div className="md:col-span-4 space-y-3">
-            <h4 className="text-[13px] font-bold text-neutral-900 uppercase tracking-wider">Public Intelligence Feeds</h4>
+            <h4 className="text-[13px] font-bold text-neutral-900 uppercase tracking-wider">Verified intelligence sources</h4>
             <ul className="space-y-2 text-[13px] text-neutral-600">
               <li className="flex items-center gap-2">
                 <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 shrink-0" />
-                <span>NOAA SPC &amp; NEXRAD Level II Radar Swaths</span>
+                <span>NOAA SPC &amp; NEXRAD Level II Real-Time Radar</span>
               </li>
               <li className="flex items-center gap-2">
                 <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 shrink-0" />
-                <span>Dallas CAD (DCAD) &amp; Tarrant CAD (TAD) GIS</span>
+                <span>Dallas CAD (DCAD) &amp; Tarrant CAD (TAD) Property GIS</span>
               </li>
               <li className="flex items-center gap-2">
                 <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 shrink-0" />
@@ -76,7 +81,7 @@ export function Footer() {
               </li>
               <li className="flex items-center gap-2">
                 <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 shrink-0" />
-                <span>Texas Sec of State Commercial Entity Filings</span>
+                <span>Texas Secretary of State Corporate Entity Filings</span>
               </li>
             </ul>
 

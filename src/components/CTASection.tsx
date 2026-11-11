@@ -180,15 +180,15 @@ export function CTASection() {
         {/* Section Header */}
         <div className="mx-auto max-w-3xl text-center">
           <h2 className="text-[2.15rem] leading-[1.12] font-bold tracking-tight text-neutral-950 sm:text-[2.85rem] md:text-[3.15rem]">
-            Lock your operating corridor before competitors pull the permit.
+            Get Depoii working for you.
           </h2>
 
           <p className="mx-auto mt-4 max-w-2xl text-[15px] leading-relaxed text-neutral-600 sm:text-base">
-            To protect lead exclusivity and contractor margins, Depoii caps workspace access to a{" "}
+            To protect contractor margins and lead exclusivity, standard corridor access is capped at a{" "}
             <span className="font-semibold text-neutral-950 bg-amber-100/80 border border-amber-300/80 px-2 py-0.5 rounded-md text-[14.5px] sm:text-[15.5px]">
               maximum of 2 commercial contractors
             </span>{" "}
-            per DFW zone. Secure full metroplex territorial lockout and autonomous commercial intelligence before competitors pull the permit.
+            per DFW zone. Regional operators who require total lockout can secure the Metroplex Dominator master license to buy out all seats across all 5 zones with 0 competitors.
           </p>
         </div>
 
@@ -288,7 +288,7 @@ export function CTASection() {
                 onClick={openFormFor}
                 className="w-full h-11 rounded-xl bg-neutral-950 text-white font-semibold hover:bg-neutral-800 transition shadow-xs flex items-center justify-center gap-2 text-sm cursor-pointer"
               >
-                <span>Schedule enterprise briefing</span>
+                <span>Request Corridor Intelligence Briefing</span>
                 <ArrowRight className="h-4 w-4" />
               </button>
             </div>
@@ -302,7 +302,7 @@ export function CTASection() {
               <DepoiiMark className="size-5 text-neutral-900" />
             </div>
             <p className="text-xs sm:text-[13.5px] leading-relaxed text-neutral-600">
-              <strong className="text-neutral-950 font-semibold">Strict Territory Exclusivity:</strong> Access is granted on a first-come corridor lock basis. Once a contract is executed, all competing bids in your zone are locked out.
+              <strong className="text-neutral-950 font-semibold">Strict Territory Exclusivity:</strong> Depoii continuously tracks commercial opportunities across DFW corridors. Your briefing reveals active targets in your zone before locking territory exclusivity.
             </p>
           </div>
           <a

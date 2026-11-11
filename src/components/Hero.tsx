@@ -5,7 +5,6 @@ import Image from "next/image";
 import Link from "next/link";
 import {
   CloudHail,
-  Building2,
   FileText,
   TrendingUp,
   CheckCircle2,
@@ -19,18 +18,8 @@ import {
   Crosshair,
   Eye,
   DollarSign,
-  Inbox,
-  Home,
-  Globe,
-  HardHat,
-  Radio,
-  Folder,
   Users,
-  Settings,
   Lock,
-  MessageSquare,
-  Star,
-  MoreHorizontal,
   Filter,
   Check,
   Target,
@@ -39,7 +28,6 @@ import {
   Activity,
   Zap,
 } from "lucide-react";
-import { DepoiiMark } from "./DepoiiLogo";
 
 // Rotating action badge in hero heading
 const rotatingBadges = [
@@ -332,9 +320,8 @@ export function Hero() {
         </h1>
 
         {/* Subtitle */}
-        <p className="mt-5 text-[17px] sm:text-[20px] text-neutral-600 max-w-[720px] mx-auto font-normal leading-[1.45]">
-          Turn real-time weather, permit data, and property intelligence into prioritized,
-          ready-to-call commercial roofing opportunities.
+        <p className="mt-5 text-[17px] sm:text-[20px] text-neutral-600 max-w-[760px] mx-auto font-normal leading-[1.45]">
+          The AI intelligence platform mapping 12,400+ DFW commercial properties. Roof age, severe storm exposure, permit history, and verified decision makers — surfaced before competitors find them.
         </p>
 
         {/* CTA in Depoii Theme */}
@@ -344,7 +331,7 @@ export function Hero() {
             prefetch={false}
             className="w-full sm:w-auto px-7 py-3 rounded-full text-white font-semibold text-[15px] bg-neutral-950 hover:bg-neutral-800 transition-all shadow-[0_4px_16px_rgba(0,0,0,0.18)] hover:shadow-[0_6px_22px_rgba(0,0,0,0.26)] active:scale-[0.98] flex items-center justify-center gap-2 group"
           >
-            <span>Claim your territory</span>
+            <span>Explore your territory intelligence</span>
             <span className="transition-transform duration-200 group-hover:translate-x-1">→</span>
           </Link>
         </div>
@@ -411,124 +398,8 @@ export function Hero() {
               <div />
             </div>
 
-            {/* ----------------- WORKSPACE BODY (SIDEBAR + MAIN) ----------------- */}
-            <div className="flex flex-col lg:flex-row min-h-[580px]">
-              {/* ----------------- LEFT SIDEBAR (Desktop Only) ----------------- */}
-              <aside className="hidden lg:flex lg:w-[190px] bg-[#fafaf9] border-r border-neutral-200 p-3 flex-col justify-between shrink-0">
-                <div className="space-y-4">
-                  {/* Depoii Official Vortex Mark & Name */}
-                  <div className="flex items-center gap-2 px-1 pt-0.5">
-                    <DepoiiMark className="w-5 h-5 text-neutral-950" />
-                    <span className="font-bold text-[15px] tracking-tight text-neutral-950">
-                      Depoii
-                    </span>
-                  </div>
-
-                  {/* Search & Inbox */}
-                  <div className="space-y-0.5 text-[12px] text-neutral-700">
-                    <div className="flex items-center justify-between px-2 py-1 rounded hover:bg-neutral-100 cursor-pointer">
-                      <div className="flex items-center gap-2">
-                        <Search className="w-3.5 h-3.5 text-neutral-400" />
-                        <span>Search</span>
-                      </div>
-                      <span className="text-[10px] text-neutral-400 font-mono">⌘K</span>
-                    </div>
-
-                    <div className="flex items-center justify-between px-2 py-1 rounded hover:bg-neutral-100 cursor-pointer">
-                      <div className="flex items-center gap-2">
-                        <Inbox className="w-3.5 h-3.5 text-neutral-400" />
-                        <span>Inbox</span>
-                      </div>
-                      <span className="text-[10px] font-bold px-1.5 py-0.2 rounded-full bg-neutral-900 text-white">
-                        3
-                      </span>
-                    </div>
-                  </div>
-
-                  {/* Primary Nav List */}
-                  <nav className="space-y-0.5 text-[13px] text-neutral-750">
-                    <div className="flex items-center gap-2 px-2 py-1 rounded hover:bg-neutral-100 cursor-pointer text-neutral-700">
-                      <Home className="w-3.5 h-3.5 text-neutral-400" />
-                      <span>Home</span>
-                    </div>
-
-                    {/* Active Hot Sheet in Depoii Theme */}
-                    <div className="flex items-center gap-2 px-2 py-1.5 rounded-md bg-neutral-200/70 text-neutral-950 font-semibold cursor-pointer border-l-2 border-neutral-950">
-                      <Zap className="w-3.5 h-3.5 text-[#FF9C6D]" />
-                      <span>Hot Sheet</span>
-                    </div>
-
-                    <div className="flex items-center gap-2 px-2 py-1 rounded hover:bg-neutral-100 cursor-pointer text-neutral-700">
-                      <Building2 className="w-3.5 h-3.5 text-neutral-400" />
-                      <span>Aging Roof</span>
-                    </div>
-
-                    <div className="flex items-center gap-2 px-2 py-1 rounded hover:bg-neutral-100 cursor-pointer text-neutral-700">
-                      <Globe className="w-3.5 h-3.5 text-neutral-400" />
-                      <span>Hail Map</span>
-                    </div>
-
-                    <div className="flex items-center gap-2 px-2 py-1 rounded hover:bg-neutral-100 cursor-pointer text-neutral-700">
-                      <FileText className="w-3.5 h-3.5 text-neutral-400" />
-                      <span>Permits</span>
-                    </div>
-
-                    <div className="flex items-center gap-2 px-2 py-1 rounded hover:bg-neutral-100 cursor-pointer text-neutral-700">
-                      <Building2 className="w-3.5 h-3.5 text-neutral-400" />
-                      <span>Buildings</span>
-                    </div>
-
-                    <div className="flex items-center gap-2 px-2 py-1 rounded hover:bg-neutral-100 cursor-pointer text-neutral-700">
-                      <HardHat className="w-3.5 h-3.5 text-neutral-400" />
-                      <span>Contractors</span>
-                    </div>
-
-                    <div className="flex items-center gap-2 px-2 py-1 rounded hover:bg-neutral-100 cursor-pointer text-neutral-700">
-                      <Radio className="w-3.5 h-3.5 text-neutral-400" />
-                      <span>Outreach</span>
-                    </div>
-                  </nav>
-
-                  {/* Section: Workspaces */}
-                  <div className="pt-2 border-t border-neutral-200">
-                    <div className="px-2 text-[10px] font-bold uppercase tracking-wider text-neutral-400 mb-1">
-                      Workspaces
-                    </div>
-                    <div className="space-y-0.5 text-[12px] text-neutral-700">
-                      <div className="flex items-center justify-between px-2 py-1 rounded hover:bg-neutral-100 cursor-pointer">
-                        <div className="flex items-center gap-2">
-                          <Folder className="w-3.5 h-3.5 text-neutral-400" />
-                          <span>Dallas Market</span>
-                        </div>
-                        <span className="text-[10px] text-neutral-400">▾</span>
-                      </div>
-                      <div className="flex items-center gap-2 px-2 py-1 rounded hover:bg-neutral-100 cursor-pointer">
-                        <Users className="w-3.5 h-3.5 text-neutral-400" />
-                        <span>Team</span>
-                      </div>
-                      <div className="flex items-center gap-2 px-2 py-1 rounded hover:bg-neutral-100 cursor-pointer">
-                        <Settings className="w-3.5 h-3.5 text-neutral-400" />
-                        <span>Integrations</span>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-
-                {/* Bottom User Profile */}
-                <div className="pt-3 border-t border-neutral-200 flex items-center justify-between px-1">
-                  <div className="flex items-center gap-2">
-                    <div className="w-6 h-6 rounded-full bg-neutral-200 flex items-center justify-center font-bold text-[10px] text-neutral-700">
-                      A
-                    </div>
-                    <div className="text-left leading-tight">
-                      <div className="text-[12px] font-semibold text-neutral-900">Ali Mirsa</div>
-                      <div className="text-[10px] text-neutral-500">Depoii</div>
-                    </div>
-                  </div>
-                  <span className="text-[10px] text-neutral-400">▾</span>
-                </div>
-              </aside>
-
+            {/* ----------------- WORKSPACE BODY ----------------- */}
+            <div className="flex flex-col min-h-[580px]">
               {/* ----------------- MAIN CANVAS ----------------- */}
               <div className="flex-1 flex flex-col p-4 sm:p-5 bg-white overflow-hidden">
                 {/* Property Header Block */}
@@ -749,18 +620,20 @@ export function Hero() {
                         <div className="flex items-center gap-1.5">
                           <Sparkles className="w-3.5 h-3.5 text-[#FF9C6D]" />
                           <span className="text-[12px] font-bold text-neutral-950">
-                            Depoii AI Deal Assessment
-                          </span>
-                          <span className="text-[9px] font-semibold px-1.5 py-0.2 rounded-full bg-neutral-100 text-neutral-800 border border-neutral-200">
-                            Beta
+                            Depoii AI Assessment
                           </span>
                         </div>
-                        {/* Audio equalizer bars in Depoii Coral */}
-                        <div className="flex items-end gap-0.5 h-3">
-                          <span className="w-0.5 bg-[#FF9C6D] rounded-full animate-wave-1" />
-                          <span className="w-0.5 bg-[#FF9C6D] rounded-full animate-wave-2" />
-                          <span className="w-0.5 bg-[#FF9C6D] rounded-full animate-wave-3" />
-                          <span className="w-0.5 bg-[#FF9C6D] rounded-full animate-wave-1" />
+                        <div className="flex items-center gap-2">
+                          {/* Audio equalizer bars in Depoii Coral */}
+                          <div className="flex items-end gap-0.5 h-3">
+                            <span className="w-0.5 bg-[#FF9C6D] rounded-full animate-wave-1" />
+                            <span className="w-0.5 bg-[#FF9C6D] rounded-full animate-wave-2" />
+                            <span className="w-0.5 bg-[#FF9C6D] rounded-full animate-wave-3" />
+                            <span className="w-0.5 bg-[#FF9C6D] rounded-full animate-wave-1" />
+                          </div>
+                          <span className="text-[9.5px] font-semibold px-2 py-0.5 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-200">
+                            Verified Brief
+                          </span>
                         </div>
                       </div>
 

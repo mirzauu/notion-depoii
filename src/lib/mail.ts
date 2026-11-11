@@ -1,5 +1,34 @@
 import nodemailer from "nodemailer";
 
+function isLocalHostname(hostHeader: string | null): boolean {
+  if (!hostHeader) return false;
+  const host = hostHeader.split(",")[0]?.trim().toLowerCase() ?? "";
+  // Strip IPv6 brackets or :port
+  const hostname = host.startsWith("[")
+    ? host.slice(1, host.indexOf("]") > -1 ? host.indexOf("]") : undefined)
+    : host.split(":")[0];
+
+  return (
+    hostname === "localhost" ||
+    hostname === "127.0.0.1" ||
+    hostname === "::1" ||
+    hostname.endsWith(".local") ||
+    /^192\.168\./.test(hostname) ||
+    /^10\./.test(hostname) ||
+    /^172\.(1[6-9]|2\d|3[0-1])\./.test(hostname)
+  );
+}
+
+/** Returns true when running in local development or served from a local host. */
+export function isLocalRuntime(req?: Request): boolean {
+  if (process.env.ENABLE_LOCAL_EMAIL === "true") return false;
+  if (process.env.NODE_ENV !== "production") return true;
+  if (!req) return false;
+
+  const host = req.headers.get("x-forwarded-host") || req.headers.get("host");
+  return isLocalHostname(host);
+}
+
 export function smtpConfigured() {
   return Boolean(process.env.SMTP_USER && process.env.SMTP_PASS && process.env.SMTP_HOST);
 }
@@ -13,6 +42,10 @@ export async function sendMail(input: {
   fromName?: string;
   visitorId?: string; // Used for thread conversation binding
 }) {
+  if (isLocalRuntime()) {
+    return;
+  }
+
   const smtpHost = process.env.SMTP_HOST;
   const smtpUser = process.env.SMTP_USER;
   const smtpPass = process.env.SMTP_PASS;

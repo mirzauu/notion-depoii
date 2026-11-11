@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { sendMail, smtpConfigured } from "@/lib/mail";
+import { isLocalRuntime, sendMail, smtpConfigured } from "@/lib/mail";
 
 export const dynamic = "force-dynamic";
 
@@ -38,6 +38,10 @@ function parseDevice(userAgent: string): string {
 
 export async function POST(req: NextRequest) {
   try {
+    if (isLocalRuntime(req)) {
+      return NextResponse.json({ ok: true, sent: false, ignored: "local" });
+    }
+
     const body = (await req.json().catch(() => ({}))) as {
       eventType?: "visit" | "dwell" | "interaction" | "form_intent";
       visitorId?: string;

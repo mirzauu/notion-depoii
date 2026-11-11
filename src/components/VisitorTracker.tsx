@@ -22,11 +22,27 @@ export function getOrCreateVisitorId(): string {
   return vid;
 }
 
+function isLocalClient(): boolean {
+  if (typeof window === "undefined") return false;
+  if (process.env.NODE_ENV !== "production") return true;
+  const host = window.location.hostname.toLowerCase();
+  return (
+    host === "localhost" ||
+    host === "127.0.0.1" ||
+    host === "::1" ||
+    host === "[::1]" ||
+    host.endsWith(".local") ||
+    /^192\.168\./.test(host) ||
+    /^10\./.test(host) ||
+    /^172\.(1[6-9]|2\d|3[0-1])\./.test(host)
+  );
+}
+
 export function logVisitorEvent(
   eventType: "visit" | "dwell" | "interaction" | "form_intent",
   extra: { actionDetail?: string; dwellSeconds?: number } = {}
 ) {
-  if (typeof window === "undefined") return;
+  if (isLocalClient()) return;
   try {
     const visitorId = getOrCreateVisitorId();
     const visitCount = Number(localStorage.getItem(VISIT_COUNT_KEY) || "1");
@@ -55,7 +71,7 @@ export function VisitorTracker() {
   const startTimeRef = useRef<number>(0);
 
   useEffect(() => {
-    if (typeof window === "undefined") return;
+    if (isLocalClient()) return;
     startTimeRef.current = Date.now();
 
     // 1. Check & increment visit count if new session

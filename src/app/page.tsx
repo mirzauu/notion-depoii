@@ -1,8 +1,9 @@
 import { Navbar } from "@/components/Navbar";
 import { Hero } from "@/components/Hero";
+import { HowDepoiiThinks } from "@/components/HowDepoiiThinks";
 import { LeadPipelineFinder } from "@/components/LeadPipelineFinder";
-// import { Testimonials } from "@/components/Testimonials";
 import { CTASection } from "@/components/CTASection";
+import { FAQ } from "@/components/FAQ";
 import { Footer } from "@/components/Footer";
 import { VisitorTracker } from "@/components/VisitorTracker";
 
@@ -12,9 +13,10 @@ export default function Home() {
       <VisitorTracker />
       <Navbar />
       <Hero />
+      <HowDepoiiThinks />
       <LeadPipelineFinder />
-      {/* <Testimonials /> */}
       <CTASection />
+      <FAQ />
       <Footer />
     </main>
   );

@@ -219,29 +219,54 @@ export function LeadPipelineFinder() {
     <section className="py-24 sm:py-32 bg-[#fafaf9] text-neutral-900 border-t border-neutral-200" id="pipeline-finder">
       <div className="max-w-[1360px] mx-auto px-4 sm:px-6 lg:px-8">
         
-        {/* Section Heading — Bold, Two Lines or Fewer, Zero Eyebrows */}
+        {/* Section Heading — Bold, matching Hero section typography with signature coral underline */}
         <div className="max-w-4xl text-left mb-10 sm:mb-14">
-          <h2 className="text-[34px] sm:text-[48px] lg:text-[56px] font-extrabold text-neutral-950 tracking-[-0.03em] leading-[1.08]">
-            Find $250k+ commercial reroofs before the warranty expires.
+          <h2 className="text-[36px] sm:text-[50px] lg:text-[58px] font-bold text-neutral-950 tracking-[-0.035em] leading-[1.12]">
+            Live commercial{" "}
+            <span className="relative inline-block text-neutral-950">
+              opportunities
+              {/* Depoii Signature Coral / Amber Underline */}
+              <svg
+                className="absolute -bottom-1.5 sm:-bottom-2.5 left-0 w-full h-3 sm:h-4 text-[#FF9C6D] pointer-events-none overflow-visible"
+                viewBox="0 0 160 16"
+                fill="none"
+                preserveAspectRatio="none"
+              >
+                <path
+                  d="M 4 12 C 40 4, 115 5, 156 8 C 130 14, 45 13, 12 14"
+                  stroke="currentColor"
+                  strokeWidth="3.6"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                />
+              </svg>
+            </span>{" "}
+            in DFW.
           </h2>
           <p className="mt-5 text-[17px] sm:text-[19px] text-neutral-600 leading-relaxed max-w-3xl">
-            Filter every commercial building in your territory by roof age, substrate, and satellite condition. 
-            Connect with the building asset manager before a roof leak turns into a multi-bid RFP race.
+            Real commercial properties with aging membranes, documented severe weather exposure, and zero permits on file. Depoii identifies the exact decision maker with verified contact details.
           </p>
         </div>
 
-        {/* Interactive Filter Control Canvas (Hidden on Mobile) */}
-        <div className="hidden md:block p-6 bg-white rounded-2xl border border-neutral-200 shadow-2xs mb-8">
-          <div className="flex items-center gap-2 pb-4 mb-5 border-b border-neutral-100 text-[13px] font-bold text-neutral-950">
-            <Filter className="w-4 h-4 text-neutral-600" />
-            <span>Commercial Territory Filters</span>
-          </div>
+        {/* Highlighted Charcoal Showcase inside Off-White Section (Filter + Cards) */}
+        <div className="rounded-3xl bg-[#191918] border border-neutral-800 shadow-[0_24px_60px_rgba(0,0,0,0.14)] p-4 sm:p-7 lg:p-9">
+          {/* Interactive Filter Control Canvas (Hidden on Mobile) */}
+          <div className="hidden md:block p-5 sm:p-6 bg-[#242422] rounded-2xl border border-white/10 mb-7">
+            <div className="flex items-center justify-between gap-2 pb-4 mb-5 border-b border-white/10 text-[13px] font-bold text-white">
+              <div className="flex items-center gap-2">
+                <Filter className="w-4 h-4 text-[#FF9C6D]" />
+                <span>Filter territory intelligence</span>
+              </div>
+              <span className="text-[12px] font-medium text-neutral-400">
+                Showing {filteredLeads.length} {filteredLeads.length === 1 ? "property" : "properties"}
+              </span>
+            </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
             
             {/* Filter 1: Texas Metro */}
             <div>
-              <label className="block text-[11px] font-bold text-neutral-500 uppercase tracking-wider mb-2">
+              <label className="block text-[11px] font-bold text-neutral-400 uppercase tracking-wider mb-2">
                 Metro Market
               </label>
               <div className="flex flex-wrap gap-1.5">
@@ -256,8 +281,8 @@ export function LeadPipelineFinder() {
                     onClick={() => setSelectedMetro(item.value)}
                     className={`px-3 py-1.5 rounded-lg text-[12px] font-medium transition-colors ${
                       selectedMetro === item.value
-                        ? "bg-neutral-950 text-white shadow-sm"
-                        : "bg-neutral-100 hover:bg-neutral-200 text-neutral-700"
+                        ? "bg-white text-neutral-950 font-semibold shadow-sm"
+                        : "bg-white/10 border border-white/10 hover:bg-white/20 text-neutral-200"
                     }`}
                   >
                     {item.label}
@@ -268,15 +293,15 @@ export function LeadPipelineFinder() {
 
             {/* Filter 2: Roof Substrate */}
             <div>
-              <label className="block text-[11px] font-bold text-neutral-500 uppercase tracking-wider mb-2">
+              <label className="block text-[11px] font-bold text-neutral-400 uppercase tracking-wider mb-2">
                 Roof Substrate
               </label>
               <div className="flex flex-wrap gap-1.5">
                 {[
-                  { label: "All Types", value: "All", color: "bg-neutral-950 text-white" },
-                  { label: "TPO & PVC", value: "TPO", color: "bg-sky-600 text-white ring-1 ring-sky-700" },
-                  { label: "EPDM", value: "EPDM", color: "bg-amber-600 text-white ring-1 ring-amber-700" },
-                  { label: "Mod-Bit", value: "Mod-Bit", color: "bg-rose-600 text-white ring-1 ring-rose-700" },
+                  { label: "All Types", value: "All", color: "bg-white text-neutral-950 font-semibold" },
+                  { label: "TPO & PVC", value: "TPO", color: "bg-sky-600 text-white ring-1 ring-sky-500" },
+                  { label: "EPDM", value: "EPDM", color: "bg-amber-600 text-white ring-1 ring-amber-500" },
+                  { label: "Mod-Bit", value: "Mod-Bit", color: "bg-rose-600 text-white ring-1 ring-rose-500" },
                 ].map((item) => {
                   const isActive = selectedSubstrate === item.value;
                   return (
@@ -286,7 +311,7 @@ export function LeadPipelineFinder() {
                       className={`px-3 py-1.5 rounded-lg text-[12px] font-medium transition-all ${
                         isActive
                           ? `${item.color} shadow-sm font-bold`
-                          : "bg-neutral-100 hover:bg-neutral-200 text-neutral-700"
+                          : "bg-white/10 border border-white/10 hover:bg-white/20 text-neutral-200"
                       }`}
                     >
                       {item.label}
@@ -298,12 +323,12 @@ export function LeadPipelineFinder() {
 
             {/* Filter 3: Roof Age & Warranty Lifecycle */}
             <div>
-              <label className="block text-[11px] font-bold text-neutral-500 uppercase tracking-wider mb-2">
+              <label className="block text-[11px] font-bold text-neutral-400 uppercase tracking-wider mb-2">
                 Roof Age / Lifecycle
               </label>
               <div className="flex flex-wrap gap-1.5">
                 {[
-                  { label: "All Ages", value: "All", color: "bg-neutral-950 text-white" },
+                  { label: "All Ages", value: "All", color: "bg-white text-neutral-950 font-semibold" },
                   { label: "14–16y", value: "14-16", color: "bg-sky-600 text-white" },
                   { label: "18–20y", value: "18-20", color: "bg-amber-600 text-white font-bold" },
                   { label: "22y+ (Critical)", value: "22+", color: "bg-rose-600 text-white font-bold" },
@@ -316,7 +341,7 @@ export function LeadPipelineFinder() {
                       className={`px-3 py-1.5 rounded-lg text-[12px] font-medium transition-all ${
                         isActive
                           ? `${item.color} shadow-sm`
-                          : "bg-neutral-100 hover:bg-neutral-200 text-neutral-700"
+                          : "bg-white/10 border border-white/10 hover:bg-white/20 text-neutral-200"
                       }`}
                     >
                       {item.label}
@@ -328,7 +353,7 @@ export function LeadPipelineFinder() {
 
             {/* Filter 4: Minimum Footprint */}
             <div>
-              <label className="block text-[11px] font-bold text-neutral-500 uppercase tracking-wider mb-2">
+              <label className="block text-[11px] font-bold text-neutral-400 uppercase tracking-wider mb-2">
                 Min. Usable Footprint
               </label>
               <div className="flex flex-wrap gap-1.5">
@@ -343,8 +368,8 @@ export function LeadPipelineFinder() {
                     onClick={() => setMinSqft(item.value)}
                     className={`px-3 py-1.5 rounded-lg text-[12px] font-medium transition-colors ${
                       minSqft === item.value
-                        ? "bg-neutral-950 text-white"
-                        : "bg-neutral-100 hover:bg-neutral-200 text-neutral-700"
+                        ? "bg-white text-neutral-950 font-semibold shadow-sm"
+                        : "bg-white/10 border border-white/10 hover:bg-white/20 text-neutral-200"
                     }`}
                   >
                     {item.label}
@@ -469,12 +494,13 @@ export function LeadPipelineFinder() {
         </div>
 
         {filteredLeads.length === 0 && (
-          <div className="p-12 text-center bg-white rounded-2xl border border-neutral-200 mt-6">
+          <div className="p-12 text-center bg-[#242422] rounded-2xl border border-white/10 mt-6">
             <Building2 className="w-8 h-8 text-neutral-400 mx-auto mb-3" />
-            <div className="font-bold text-neutral-900 text-[16px]">No commercial properties match these filters.</div>
-            <p className="text-neutral-500 text-[13px] mt-1">Try widening your square footage or selecting all Texas metros.</p>
+            <div className="font-bold text-white text-[16px]">No commercial properties match these filters.</div>
+            <p className="text-neutral-400 text-[13px] mt-1">Try widening your square footage or selecting all Texas metros.</p>
           </div>
         )}
+        </div>
 
       </div>
     </section>
