@@ -18,7 +18,7 @@ export function Footer() {
               <span className="font-bold text-[1.3rem] tracking-tight text-neutral-950">Depoii</span>
             </Link>
             <p className="text-[14px] text-neutral-600 max-w-sm leading-relaxed">
-              Commercial roofing intelligence for Dallas–Fort Worth. Roof age, severe storm history, and verified decision makers mapped across 12,400+ properties.
+              Commercial roofing intelligence for Dallas–Fort Worth. Roof age, severe storm history, and verified decision makers mapped across 70,000+ properties.
             </p>
             <div className="pt-1 flex items-center gap-2 text-[14px]">
               <Mail className="w-4 h-4 text-neutral-400" />

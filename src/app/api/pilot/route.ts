@@ -112,7 +112,7 @@ export async function POST(req: Request) {
                       </tr>
                       <tr>
                         <td style="padding: 6px 0; color: #6b7280; font-weight: 600;">Target Territory:</td>
-                        <td style="padding: 6px 0; color: #111827; font-weight: 600;">Dallas–Fort Worth, TX (12,400+ roofs)</td>
+                        <td style="padding: 6px 0; color: #111827; font-weight: 600;">Dallas–Fort Worth, TX (70,000+ roofs)</td>
                       </tr>
                       <tr>
                         <td style="padding: 6px 0; color: #6b7280; font-weight: 600;">Lockout Status:</td>

@@ -469,7 +469,7 @@ export function DemoModal({ isOpen, onClose }: DemoModalProps) {
               </div>
               <div className="py-2 flex items-center justify-between">
                 <span className="text-neutral-500 font-medium">Active Coverage</span>
-                <span className="font-bold text-neutral-950">12,400+ Monitored Roofs</span>
+                <span className="font-bold text-neutral-950">70,000+ Monitored Roofs</span>
               </div>
               <div className="py-2 flex items-center justify-between">
                 <span className="text-neutral-500 font-medium">Corridor Lockout</span>

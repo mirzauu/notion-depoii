@@ -321,7 +321,7 @@ export function Hero() {
 
         {/* Subtitle */}
         <p className="mt-5 text-[17px] sm:text-[20px] text-neutral-600 max-w-[760px] mx-auto font-normal leading-[1.45]">
-          The AI intelligence platform mapping 12,400+ DFW commercial properties. Roof age, severe storm exposure, permit history, and verified decision makers — surfaced before competitors find them.
+          The AI intelligence platform mapping 70,000+ DFW commercial properties. Roof age, severe storm exposure, permit history, and verified decision makers — surfaced before competitors find them.
         </p>
 
         {/* CTA in Depoii Theme */}
