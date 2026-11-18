@@ -50,16 +50,6 @@ export function Footer() {
                   DFW Flagged Properties
                 </Link>
               </li>
-              <li>
-                <Link href="#pilot" prefetch={false} className="hover:text-neutral-950 transition-colors">
-                  Corridor Lockout &amp; Pricing
-                </Link>
-              </li>
-              <li>
-                <Link href="#faq" prefetch={false} className="hover:text-neutral-950 transition-colors">
-                  Frequently Asked Questions
-                </Link>
-              </li>
             </ul>
           </div>
 

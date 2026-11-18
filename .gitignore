@@ -39,3 +39,7 @@ next-env.d.ts
 /reference/
 /public/assets/videos/
 RECONSTRUCTION_REPORT.md
+
+# runtime visitor data logs
+/data/
+*.jsonl

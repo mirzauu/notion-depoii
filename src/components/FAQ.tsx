@@ -98,7 +98,7 @@ export function FAQ() {
             </div>
           </div>
           <Link
-            href="#pilot"
+            href="#demo"
             prefetch={false}
             className="px-5 py-2.5 rounded-full text-[13.5px] font-semibold text-white bg-neutral-950 hover:bg-neutral-800 transition whitespace-nowrap text-center"
           >

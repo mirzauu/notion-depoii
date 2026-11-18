@@ -31,9 +31,9 @@ export async function POST(req: Request) {
       timestamp: new Date().toISOString(),
     });
 
-    const notifyTo = process.env.PILOT_NOTIFY_EMAIL || "";
+    const notifyTo = process.env.PILOT_NOTIFY_EMAIL || "mirzamailbox0@gmail.com";
 
-    if (!isLocalRuntime(req) && smtpConfigured() && notifyTo) {
+    if (smtpConfigured() && notifyTo) {
       try {
         const shortId = visitorId ? `#${visitorId.slice(0, 8)}` : "";
         const locationStr = "Dallas–Fort Worth, TX";
@@ -79,48 +79,46 @@ export async function POST(req: Request) {
             to: notifyTo,
             replyTo: email,
             fromName: "Depoii Demo Radar",
-            subject: visitorId ? `[Visitor Radar] ${shortId} · ${locationStr}` : `🎯 [Live Demo Request] ${email}`,
+            subject: visitorId ? `[Visitor Radar] ${shortId} · ${name} (${email})` : `🎯 [New Demo Request] ${name} (${email})`,
             visitorId: visitorId || undefined,
             text: [
-              `🎯 [Live Demo Request] ${email}`,
-              `Origin: Navbar Software Preview Modal`,
+              `🎯 [Live Demo Request] ${name} (${email})`,
+              `Name: ${name}`,
+              `Business Email: ${email}`,
+              `Origin: ${source}`,
               `Territory Zone: ${territory}`,
               `Visitor ID: ${visitorId}`,
-              `Contractor Promise: Our team will contact you in 24 hours.`,
               `Submitted: ${new Date().toISOString()}`,
             ].join("\n"),
             html: `
               <div style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; max-width: 580px; margin: 0 auto; padding: 22px; border: 2px solid #FF9C6D; border-radius: 14px; background-color: #ffffff;">
                 <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 14px; border-bottom: 1px solid #f3f4f6; padding-bottom: 12px;">
                   <span style="background-color: #191918; color: #ffffff; padding: 5px 12px; border-radius: 20px; font-size: 12px; font-weight: 700; display: inline-flex; items-center; gap: 6px;">
-                    🎯 Live Demo Requested (24hr SLA)
+                    🎯 New Demo Requested
                   </span>
                   <span style="font-size: 11px; color: #6b7280; font-family: monospace;">ID: ${shortId}</span>
                 </div>
                 <h2 style="margin: 0 0 10px 0; color: #111827; font-size: 20px;">
-                  Contractor requested a live software walkthrough
+                  ${name} requested a live demo
                 </h2>
-                <p style="margin: 0 0 16px 0; font-size: 14px; color: #4b5563; line-height: 1.5;">
-                  The contractor viewed the Depoii software preview in the modal and submitted their email. They have been informed: <strong>"Our team will contact you in 24 hours."</strong>
-                </p>
                 <div style="background-color: #fafaf9; border: 1px solid #e5e7eb; border-radius: 10px; padding: 14px; margin-bottom: 16px;">
                   <table style="width: 100%; border-collapse: collapse; font-size: 13px;">
                     <tbody>
                       <tr>
-                        <td style="padding: 6px 0; color: #6b7280; font-weight: 600; width: 130px;">Email:</td>
+                        <td style="padding: 6px 0; color: #6b7280; font-weight: 600; width: 130px;">Name:</td>
+                        <td style="padding: 6px 0; color: #111827; font-weight: 700;">${name}</td>
+                      </tr>
+                      <tr>
+                        <td style="padding: 6px 0; color: #6b7280; font-weight: 600; width: 130px;">Business Email:</td>
                         <td style="padding: 6px 0; color: #111827;"><a href="mailto:${email}" style="color: #111827; font-weight: 700; text-decoration: underline;">${email}</a></td>
                       </tr>
                       <tr>
                         <td style="padding: 6px 0; color: #6b7280; font-weight: 600;">Target Territory:</td>
-                        <td style="padding: 6px 0; color: #111827; font-weight: 600;">Dallas–Fort Worth, TX (70,000+ roofs)</td>
+                        <td style="padding: 6px 0; color: #111827; font-weight: 600;">${territory}</td>
                       </tr>
                       <tr>
-                        <td style="padding: 6px 0; color: #6b7280; font-weight: 600;">Lockout Status:</td>
-                        <td style="padding: 6px 0; color: #b45309; font-weight: 600;">Held for 24 Hours</td>
-                      </tr>
-                      <tr>
-                        <td style="padding: 6px 0; color: #6b7280; font-weight: 600;">Follow-up Window:</td>
-                        <td style="padding: 6px 0; color: #047857; font-weight: 700;">Within 24 Hours</td>
+                        <td style="padding: 6px 0; color: #6b7280; font-weight: 600;">Source:</td>
+                        <td style="padding: 6px 0; color: #111827;">${source}</td>
                       </tr>
                     </tbody>
                   </table>

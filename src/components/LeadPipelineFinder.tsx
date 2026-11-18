@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useMemo } from "react";
+import React from "react";
 import Image from "next/image";
 import { 
   Building2, 
@@ -12,8 +12,10 @@ import {
   MapPin, 
   Mail, 
   Phone, 
-  Filter,
-  User
+  User,
+  Lock,
+  ArrowRight,
+  ShieldCheck
 } from "lucide-react";
 
 interface PipelineLead {
@@ -21,20 +23,15 @@ interface PipelineLead {
   name: string;
   address: string;
   city: string;
-  metro: "DFW" | "Houston" | "Austin";
   sqft: string;
-  sqftNum: number;
   ageTag: string;
-  ageYears: number;
-  installYear: number;
-  substrate: "TPO" | "EPDM" | "Mod-Bit";
+  substrate: string;
   grade: "Grade D" | "Grade C";
   condition: string;
   image: string;
   iconType: "building" | "factory" | "layers" | "box" | "barChart";
   contact: {
     name: string;
-    initials: string;
     title: string;
     email: string;
     phone: string;
@@ -48,8 +45,6 @@ interface PipelineLead {
     gradeText: string;
     gradeBorder: string;
     waveColor: string;
-    avatarBg: string;
-    avatarText: string;
   };
 }
 
@@ -59,12 +54,8 @@ const ALL_PIPELINE_LEADS: PipelineLead[] = [
     name: "Valwood Industrial Distribution Center",
     address: "1685 Valwood Pkwy, Carrollton, TX",
     city: "Carrollton, TX",
-    metro: "DFW",
     sqft: "68,400 sq ft",
-    sqftNum: 68400,
     ageTag: "20 yrs (2004)",
-    ageYears: 20,
-    installYear: 2004,
     substrate: "TPO",
     grade: "Grade D",
     condition: "Perimeter seam separation & persistent ponding near central drainage scuppers.",
@@ -72,22 +63,19 @@ const ALL_PIPELINE_LEADS: PipelineLead[] = [
     iconType: "building",
     contact: {
       name: "Arthur Pendelton",
-      initials: "AP",
       title: "VP of Commercial Asset Management",
       email: "a.pendelton@texasgatewaylogistics.com",
       phone: "+1 (214) 555-0812",
     },
     theme: {
-      cardBg: "bg-[#f4f9ff]",
-      cardBorder: "border-[#d6e8fc]",
+      cardBg: "bg-white",
+      cardBorder: "border-neutral-200/90",
       medallionBg: "bg-[#e0f2fe]",
       medallionText: "text-[#0284c7]",
       gradeBg: "bg-[#fff2eb]",
       gradeText: "text-[#c2410c]",
       gradeBorder: "border-[#fed7aa]/70",
       waveColor: "text-[#0284c7]",
-      avatarBg: "bg-[#dbeafe]",
-      avatarText: "text-[#1d4ed8]",
     },
   },
   {
@@ -95,35 +83,28 @@ const ALL_PIPELINE_LEADS: PipelineLead[] = [
     name: "Riverside Packaging Industrial Park",
     address: "3201 Riverside Dr, Irving, TX",
     city: "Irving, TX",
-    metro: "DFW",
     sqft: "124,500 sq ft",
-    sqftNum: 124500,
     ageTag: "18 yrs (2006)",
-    ageYears: 18,
-    installYear: 2006,
     substrate: "TPO",
     grade: "Grade D",
-    condition: "Alligatoring and edge splitting on membrane, wear across south section.",
+    condition: "Alligatoring and edge splitting on membrane, wear across south roof section.",
     image: "/assets/aerials/dcad-12221.jpg",
     iconType: "factory",
     contact: {
       name: "Becca Whitmore",
-      initials: "BW",
       title: "Director of Facilities",
       email: "b.whitmore@riversideindustrial.com",
       phone: "+1 (972) 555-0419",
     },
     theme: {
-      cardBg: "bg-[#f2faf5]",
-      cardBorder: "border-[#d1f2dd]",
+      cardBg: "bg-white",
+      cardBorder: "border-neutral-200/90",
       medallionBg: "bg-[#dcfce7]",
       medallionText: "text-[#16a34a]",
       gradeBg: "bg-[#fff2eb]",
       gradeText: "text-[#c2410c]",
       gradeBorder: "border-[#fed7aa]/70",
       waveColor: "text-[#16a34a]",
-      avatarBg: "bg-[#fef3c7]",
-      avatarText: "text-[#b45309]",
     },
   },
   {
@@ -131,35 +112,115 @@ const ALL_PIPELINE_LEADS: PipelineLead[] = [
     name: "Pioneer Tex Chemical Ops Terminal",
     address: "6700 Chemical Ln, Denton, TX",
     city: "Denton, TX",
-    metro: "DFW",
     sqft: "142,000 sq ft",
-    sqftNum: 142000,
     ageTag: "19 yrs (2005)",
-    ageYears: 19,
-    installYear: 2005,
     substrate: "Mod-Bit",
     grade: "Grade D",
-    condition: "Granule loss, perimeter cracking, and aging flashings at penetrations.",
+    condition: "Granule loss, perimeter cracking, and aging flashings at mechanical penetrations.",
     image: "/assets/aerials/dcad-16850.jpg",
     iconType: "barChart",
     contact: {
       name: "Lisa Henderson",
-      initials: "LH",
       title: "Facilities Manager",
       email: "l.henderson@pioneertex.com",
       phone: "+1 (940) 555-0371",
     },
     theme: {
-      cardBg: "bg-[#fffcf2]",
-      cardBorder: "border-[#feefc3]",
+      cardBg: "bg-white",
+      cardBorder: "border-neutral-200/90",
       medallionBg: "bg-[#fef3c7]",
       medallionText: "text-[#d97706]",
       gradeBg: "bg-[#fff2eb]",
       gradeText: "text-[#c2410c]",
       gradeBorder: "border-[#fed7aa]/70",
       waveColor: "text-[#d97706]",
-      avatarBg: "bg-[#fef3c7]",
-      avatarText: "text-[#b45309]",
+    },
+  },
+  {
+    id: "central-expy",
+    name: "Central Expressway Logistics Hub",
+    address: "8600 S Central Expy, Dallas, TX",
+    city: "Dallas, TX",
+    sqft: "48,200 sq ft",
+    ageTag: "19 yrs (2005)",
+    substrate: "TPO",
+    grade: "Grade D",
+    condition: "Severe blistering along expansion joints following 1.75\" hail impact.",
+    image: "/assets/aerials/dcad-4100.jpg",
+    iconType: "building",
+    contact: {
+      name: "Marcus Vance",
+      title: "VP of Real Estate Operations",
+      email: "m.vance@centrallogisticsdfw.com",
+      phone: "+1 (214) 555-9831",
+    },
+    theme: {
+      cardBg: "bg-white",
+      cardBorder: "border-neutral-200/90",
+      medallionBg: "bg-[#e0f2fe]",
+      medallionText: "text-[#0284c7]",
+      gradeBg: "bg-[#fff2eb]",
+      gradeText: "text-[#c2410c]",
+      gradeBorder: "border-[#fed7aa]/70",
+      waveColor: "text-[#0284c7]",
+    },
+  },
+  {
+    id: "stemmons",
+    name: "Stemmons Industrial Distribution Center",
+    address: "11411 Stemmons Fwy, Dallas, TX",
+    city: "Dallas, TX",
+    sqft: "84,300 sq ft",
+    ageTag: "21 yrs (2003)",
+    substrate: "Mod-Bit",
+    grade: "Grade C",
+    condition: "Surface embrittlement and documented hail impacts across northwest bays.",
+    image: "/assets/aerials/dcad-outside.jpg",
+    iconType: "factory",
+    contact: {
+      name: "Sarah Jenkins",
+      title: "Senior Director of Facilities",
+      email: "s.jenkins@stemmonstrade.com",
+      phone: "+1 (972) 555-8120",
+    },
+    theme: {
+      cardBg: "bg-white",
+      cardBorder: "border-neutral-200/90",
+      medallionBg: "bg-[#fef3c7]",
+      medallionText: "text-[#d97706]",
+      gradeBg: "bg-[#fff7ed]",
+      gradeText: "text-[#ea580c]",
+      gradeBorder: "border-[#ffedd5]",
+      waveColor: "text-[#d97706]",
+    },
+  },
+  {
+    id: "regal-row",
+    name: "Regal Row Wholesale Logistics Center",
+    address: "2400 Regal Row, Dallas, TX",
+    city: "Dallas, TX",
+    sqft: "112,000 sq ft",
+    ageTag: "17 yrs (2007)",
+    substrate: "EPDM",
+    grade: "Grade D",
+    condition: "Perimeter ballast displacement and severe seam shrinkage under south HVAC units.",
+    image: "/assets/aerials/hero-roof.jpg",
+    iconType: "layers",
+    contact: {
+      name: "David Thorne",
+      title: "Head of Regional Asset Operations",
+      email: "d.thorne@regalwholesale.com",
+      phone: "+1 (214) 555-3419",
+    },
+    theme: {
+      cardBg: "bg-white",
+      cardBorder: "border-neutral-200/90",
+      medallionBg: "bg-[#dcfce7]",
+      medallionText: "text-[#16a34a]",
+      gradeBg: "bg-[#fff2eb]",
+      gradeText: "text-[#c2410c]",
+      gradeBorder: "border-[#fed7aa]/70",
+      waveColor: "text-[#16a34a]",
     },
   },
 ];
@@ -172,7 +233,7 @@ function WaveIcon({ className = "w-3.5 h-3.5" }: { className?: string }) {
       fill="none" 
       stroke="currentColor" 
       strokeWidth="2.5" 
-      strokeLinecap="round"
+      strokeLinecap="round" 
       strokeLinejoin="round"
     >
       <path d="M2 12c2.5-3.5 6-3.5 8.5 0s6 3.5 8.5 0" />
@@ -197,199 +258,24 @@ function LeadIcon({ type }: { type: string }) {
 }
 
 export function LeadPipelineFinder() {
-  const [selectedMetro, setSelectedMetro] = useState<string>("All");
-  const [selectedSubstrate, setSelectedSubstrate] = useState<string>("All");
-  const [selectedAge, setSelectedAge] = useState<string>("All");
-  const [minSqft, setMinSqft] = useState<number>(0);
-
-  // Filter logic
-  const filteredLeads = useMemo(() => {
-    return ALL_PIPELINE_LEADS.filter((lead) => {
-      if (selectedMetro !== "All" && lead.metro !== selectedMetro) return false;
-      if (selectedSubstrate !== "All" && lead.substrate !== selectedSubstrate) return false;
-      if (minSqft > 0 && lead.sqftNum < minSqft) return false;
-      if (selectedAge === "14-16" && (lead.ageYears < 14 || lead.ageYears > 16)) return false;
-      if (selectedAge === "18-20" && (lead.ageYears < 18 || lead.ageYears > 20)) return false;
-      if (selectedAge === "22+" && lead.ageYears < 22) return false;
-      return true;
-    });
-  }, [selectedMetro, selectedSubstrate, selectedAge, minSqft]);
-
   return (
-    <section className="py-24 sm:py-32 bg-[#fafaf9] text-neutral-900 border-t border-neutral-200" id="pipeline-finder">
-      <div className="max-w-[1360px] mx-auto px-4 sm:px-6 lg:px-8">
-        
-        {/* Section Heading — Bold, matching Hero section typography with signature coral underline */}
-        <div className="max-w-4xl text-left mb-10 sm:mb-14">
-          <h2 className="text-[36px] sm:text-[50px] lg:text-[58px] font-bold text-neutral-950 tracking-[-0.035em] leading-[1.12]">
-            Live commercial{" "}
-            <span className="relative inline-block text-neutral-950">
-              opportunities
-              {/* Depoii Signature Coral / Amber Underline */}
-              <svg
-                className="absolute -bottom-1.5 sm:-bottom-2.5 left-0 w-full h-3 sm:h-4 text-[#FF9C6D] pointer-events-none overflow-visible"
-                viewBox="0 0 160 16"
-                fill="none"
-                preserveAspectRatio="none"
-              >
-                <path
-                  d="M 4 12 C 40 4, 115 5, 156 8 C 130 14, 45 13, 12 14"
-                  stroke="currentColor"
-                  strokeWidth="3.6"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                />
-              </svg>
-            </span>{" "}
-            in DFW.
-          </h2>
-          <p className="mt-5 text-[17px] sm:text-[19px] text-neutral-600 leading-relaxed max-w-3xl">
-            Real commercial properties with aging membranes, documented severe weather exposure, and zero permits on file. Depoii identifies the exact decision maker with verified contact details.
-          </p>
-        </div>
+    <section className="py-12 sm:py-16 bg-[#fafaf9] text-neutral-900 border-t border-neutral-200 overflow-hidden" id="pipeline-finder">
+      {/* Auto-scrolling Cards Marquee (Left to Right) */}
+      <div className="relative w-full overflow-hidden py-4">
+        {/* Left and Right Fade Gradients */}
+        <div className="pointer-events-none absolute left-0 top-0 bottom-0 w-16 sm:w-36 bg-gradient-to-r from-[#fafaf9] via-[#fafaf9]/80 to-transparent z-10" />
+        <div className="pointer-events-none absolute right-0 top-0 bottom-0 w-16 sm:w-36 bg-gradient-to-l from-[#fafaf9] via-[#fafaf9]/80 to-transparent z-10" />
 
-        {/* Highlighted Charcoal Showcase inside Off-White Section (Filter + Cards) */}
-        <div className="rounded-3xl bg-[#191918] border border-neutral-800 shadow-[0_24px_60px_rgba(0,0,0,0.14)] p-4 sm:p-7 lg:p-9">
-          {/* Interactive Filter Control Canvas (Hidden on Mobile) */}
-          <div className="hidden md:block p-5 sm:p-6 bg-[#242422] rounded-2xl border border-white/10 mb-7">
-            <div className="flex items-center justify-between gap-2 pb-4 mb-5 border-b border-white/10 text-[13px] font-bold text-white">
-              <div className="flex items-center gap-2">
-                <Filter className="w-4 h-4 text-[#FF9C6D]" />
-                <span>Filter territory intelligence</span>
-              </div>
-              <span className="text-[12px] font-medium text-neutral-400">
-                Showing {filteredLeads.length} {filteredLeads.length === 1 ? "property" : "properties"}
-              </span>
-            </div>
-
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-            
-            {/* Filter 1: Texas Metro */}
-            <div>
-              <label className="block text-[11px] font-bold text-neutral-400 uppercase tracking-wider mb-2">
-                Metro Market
-              </label>
-              <div className="flex flex-wrap gap-1.5">
-                {[
-                  { label: "All Texas", value: "All" },
-                  { label: "DFW", value: "DFW" },
-                  { label: "Houston", value: "Houston" },
-                  { label: "Austin", value: "Austin" },
-                ].map((item) => (
-                  <button
-                    key={item.value}
-                    onClick={() => setSelectedMetro(item.value)}
-                    className={`px-3 py-1.5 rounded-lg text-[12px] font-medium transition-colors ${
-                      selectedMetro === item.value
-                        ? "bg-white text-neutral-950 font-semibold shadow-sm"
-                        : "bg-white/10 border border-white/10 hover:bg-white/20 text-neutral-200"
-                    }`}
-                  >
-                    {item.label}
-                  </button>
-                ))}
-              </div>
-            </div>
-
-            {/* Filter 2: Roof Substrate */}
-            <div>
-              <label className="block text-[11px] font-bold text-neutral-400 uppercase tracking-wider mb-2">
-                Roof Substrate
-              </label>
-              <div className="flex flex-wrap gap-1.5">
-                {[
-                  { label: "All Types", value: "All", color: "bg-white text-neutral-950 font-semibold" },
-                  { label: "TPO & PVC", value: "TPO", color: "bg-sky-600 text-white ring-1 ring-sky-500" },
-                  { label: "EPDM", value: "EPDM", color: "bg-amber-600 text-white ring-1 ring-amber-500" },
-                  { label: "Mod-Bit", value: "Mod-Bit", color: "bg-rose-600 text-white ring-1 ring-rose-500" },
-                ].map((item) => {
-                  const isActive = selectedSubstrate === item.value;
-                  return (
-                    <button
-                      key={item.value}
-                      onClick={() => setSelectedSubstrate(item.value)}
-                      className={`px-3 py-1.5 rounded-lg text-[12px] font-medium transition-all ${
-                        isActive
-                          ? `${item.color} shadow-sm font-bold`
-                          : "bg-white/10 border border-white/10 hover:bg-white/20 text-neutral-200"
-                      }`}
-                    >
-                      {item.label}
-                    </button>
-                  );
-                })}
-              </div>
-            </div>
-
-            {/* Filter 3: Roof Age & Warranty Lifecycle */}
-            <div>
-              <label className="block text-[11px] font-bold text-neutral-400 uppercase tracking-wider mb-2">
-                Roof Age / Lifecycle
-              </label>
-              <div className="flex flex-wrap gap-1.5">
-                {[
-                  { label: "All Ages", value: "All", color: "bg-white text-neutral-950 font-semibold" },
-                  { label: "14–16y", value: "14-16", color: "bg-sky-600 text-white" },
-                  { label: "18–20y", value: "18-20", color: "bg-amber-600 text-white font-bold" },
-                  { label: "22y+ (Critical)", value: "22+", color: "bg-rose-600 text-white font-bold" },
-                ].map((item) => {
-                  const isActive = selectedAge === item.value;
-                  return (
-                    <button
-                      key={item.value}
-                      onClick={() => setSelectedAge(item.value)}
-                      className={`px-3 py-1.5 rounded-lg text-[12px] font-medium transition-all ${
-                        isActive
-                          ? `${item.color} shadow-sm`
-                          : "bg-white/10 border border-white/10 hover:bg-white/20 text-neutral-200"
-                      }`}
-                    >
-                      {item.label}
-                    </button>
-                  );
-                })}
-              </div>
-            </div>
-
-            {/* Filter 4: Minimum Footprint */}
-            <div>
-              <label className="block text-[11px] font-bold text-neutral-400 uppercase tracking-wider mb-2">
-                Min. Usable Footprint
-              </label>
-              <div className="flex flex-wrap gap-1.5">
-                {[
-                  { label: "Any Sq Ft", value: 0 },
-                  { label: "60k+ sq ft", value: 60000 },
-                  { label: "90k+ sq ft", value: 90000 },
-                  { label: "140k+ sq ft", value: 140000 },
-                ].map((item) => (
-                  <button
-                    key={item.value}
-                    onClick={() => setMinSqft(item.value)}
-                    className={`px-3 py-1.5 rounded-lg text-[12px] font-medium transition-colors ${
-                      minSqft === item.value
-                        ? "bg-white text-neutral-950 font-semibold shadow-sm"
-                        : "bg-white/10 border border-white/10 hover:bg-white/20 text-neutral-200"
-                    }`}
-                  >
-                    {item.label}
-                  </button>
-                ))}
-              </div>
-            </div>
-
-          </div>
-        </div>
-
-        {/* Lead Cards Grid — Exactly matching user design mockup */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {filteredLeads.map((lead) => (
+        {/* Continuous Marquee Track gliding from Left to Right */}
+        <div className="flex w-max gap-6 animate-marquee-reverse hover:[animation-play-state:paused] px-4 cursor-grab active:cursor-grabbing">
+          {/* Duplicated list to create an endless seamless loop */}
+          {[...ALL_PIPELINE_LEADS, ...ALL_PIPELINE_LEADS].map((lead, index) => (
             <div
-              key={lead.id}
-              className={`${lead.theme.cardBg} ${lead.theme.cardBorder} rounded-2xl border overflow-hidden flex flex-col justify-between shadow-2xs hover:shadow-md transition-all duration-300`}
+              key={`${lead.id}-${index}`}
+              className="w-[340px] sm:w-[390px] shrink-0 bg-white rounded-2xl border border-neutral-200/90 overflow-hidden flex flex-col justify-between shadow-[0_2px_12px_rgba(0,0,0,0.03)] hover:shadow-[0_12px_32px_rgba(0,0,0,0.08)] hover:border-neutral-300 transition-all duration-300"
             >
               <div>
-                {/* Top Satellite Aerial Thumbnail with 2 Badges */}
+                {/* Top Satellite Aerial Thumbnail with Badges */}
                 <div className="relative aspect-[16/9] w-full overflow-hidden bg-neutral-100">
                   <Image
                     src={lead.image}
@@ -398,25 +284,25 @@ export function LeadPipelineFinder() {
                     className="object-cover transition-transform duration-500 hover:scale-105"
                   />
 
-                  {/* Top-Left Badge: Calendar + Age */}
-                  <div className="absolute top-3 left-3 px-2.5 py-1 rounded-md bg-black/60 backdrop-blur-xs text-white text-[11px] font-medium flex items-center gap-1.5 shadow-xs">
+                  {/* Top-Left Badge: Age & Install Year */}
+                  <div className="absolute top-3 left-3 px-2.5 py-1 rounded-md bg-black/65 backdrop-blur-xs text-white text-[11px] font-medium flex items-center gap-1.5 shadow-xs">
                     <Calendar className="w-3.5 h-3.5 text-neutral-300" />
                     <span>{lead.ageTag}</span>
                   </div>
 
                   {/* Top-Right Badge: Sq Ft */}
-                  <div className="absolute top-3 right-3 px-2.5 py-1 rounded-md bg-black/60 backdrop-blur-xs text-white text-[11px] font-medium shadow-xs">
+                  <div className="absolute top-3 right-3 px-2.5 py-1 rounded-md bg-black/65 backdrop-blur-xs text-white text-[11px] font-medium shadow-xs">
                     {lead.sqft}
                   </div>
                 </div>
 
                 {/* Card Body */}
-                <div className="p-4 sm:p-5 flex flex-col gap-3.5">
+                <div className="p-5 flex flex-col gap-3.5">
                   
                   {/* Header Row: Medallion + Name/Address + Grade Badge */}
                   <div className="flex items-start justify-between gap-2.5">
                     <div className="flex items-start gap-3 min-w-0">
-                      {/* 38px/40px Medallion */}
+                      {/* Medallion */}
                       <div className={`w-9 h-9 sm:w-10 sm:h-10 rounded-xl ${lead.theme.medallionBg} ${lead.theme.medallionText} flex items-center justify-center shrink-0 shadow-2xs mt-0.5`}>
                         <LeadIcon type={lead.iconType} />
                       </div>
@@ -447,14 +333,14 @@ export function LeadPipelineFinder() {
                     </p>
                   </div>
 
-                  {/* Row 3: Decision Maker & Action Buttons */}
-                  <div className="flex items-center justify-between gap-3 pt-3">
+                  {/* Row 3: Decision Maker & Action Buttons with Locked Indicator */}
+                  <div className="flex items-center justify-between gap-3 pt-3 border-t border-neutral-100">
                     <a
-                      href="#pilot"
+                      href="#demo"
                       className="flex items-center gap-2.5 min-w-0 group/contact hover:opacity-85 transition-opacity"
-                      title="Unlock full contact details in pilot workspace"
+                      title="Unlock full contact details in live briefing"
                     >
-                      {/* Real User Icon in Black */}
+                      {/* User Icon */}
                       <div className="w-8 h-8 rounded-full bg-neutral-100 border border-neutral-200/90 flex items-center justify-center shrink-0 text-neutral-950 shadow-2xs group-hover/contact:border-neutral-400">
                         <User className="w-4 h-4 text-neutral-950" strokeWidth={2.2} />
                       </div>
@@ -468,23 +354,15 @@ export function LeadPipelineFinder() {
                       </div>
                     </a>
 
-                    {/* Actions: Mail and Phone Buttons */}
-                    <div className="flex items-center gap-1.5 shrink-0">
-                      <a
-                        href="#pilot"
-                        className="w-8 h-8 rounded-lg border border-neutral-200/90 bg-white hover:bg-neutral-50 hover:border-neutral-300 flex items-center justify-center text-neutral-600 hover:text-neutral-900 transition-colors shadow-2xs"
-                        title="Unlock verified email in pilot workspace"
-                      >
-                        <Mail className="w-3.5 h-3.5" />
-                      </a>
-                      <a
-                        href="#pilot"
-                        className="w-8 h-8 rounded-lg border border-neutral-200/90 bg-white hover:bg-neutral-50 hover:border-neutral-300 flex items-center justify-center text-neutral-600 hover:text-neutral-900 transition-colors shadow-2xs"
-                        title="Unlock direct phone line in pilot workspace"
-                      >
-                        <Phone className="w-3.5 h-3.5" />
-                      </a>
-                    </div>
+                    {/* Actions: Direct Line Locked Badge */}
+                    <a
+                      href="#demo"
+                      className="inline-flex items-center gap-1 px-2.5 py-1.5 rounded-lg border border-amber-200/90 bg-amber-50/80 hover:bg-amber-100/80 text-amber-900 transition-all shadow-2xs shrink-0 group/unlock"
+                      title="Direct phone & email verified · Click to unlock in live briefing"
+                    >
+                      <Lock className="w-3 h-3 text-amber-700 shrink-0 group-hover/unlock:scale-110 transition-transform" />
+                      <span className="text-[11px] font-semibold">Unlock Line</span>
+                    </a>
                   </div>
 
                 </div>
@@ -492,16 +370,31 @@ export function LeadPipelineFinder() {
             </div>
           ))}
         </div>
+      </div>
 
-        {filteredLeads.length === 0 && (
-          <div className="p-12 text-center bg-[#242422] rounded-2xl border border-white/10 mt-6">
-            <Building2 className="w-8 h-8 text-neutral-400 mx-auto mb-3" />
-            <div className="font-bold text-white text-[16px]">No commercial properties match these filters.</div>
-            <p className="text-neutral-400 text-[13px] mt-1">Try widening your square footage or selecting all Texas metros.</p>
+      {/* Bottom Conversion Banner (Flaw 4) */}
+      <div className="max-w-[1360px] mx-auto px-4 sm:px-6 lg:px-8 mt-12 sm:mt-16">
+        <div className="bg-white rounded-2xl border border-neutral-200 p-6 sm:p-8 flex flex-col md:flex-row items-start md:items-center justify-between gap-6 shadow-sm">
+          <div>
+            <div className="inline-flex items-center gap-2 px-2.5 py-1 rounded-full bg-emerald-50 border border-emerald-200 text-emerald-800 text-[11px] font-semibold uppercase tracking-wider mb-2">
+              <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
+              Live DFW Pipeline Active
+            </div>
+            <h4 className="text-[20px] sm:text-[22px] font-bold text-neutral-950 tracking-tight">
+              Over 1,240 commercial roofs currently hold severe storm exposure with 0 permits filed.
+            </h4>
+            <p className="text-[14px] sm:text-[15px] text-neutral-600 mt-1">
+              Reserve your submarket to unlock full satellite dossiers, permit deltas, and verified owner direct dials.
+            </p>
           </div>
-        )}
+          <a
+            href="#demo"
+            className="shrink-0 px-6 py-3 rounded-full bg-neutral-950 hover:bg-neutral-800 text-white font-semibold text-[14px] transition-all shadow-sm flex items-center gap-2 group"
+          >
+            <span>Unlock All Direct Dials</span>
+            <span className="transition-transform duration-200 group-hover:translate-x-1">→</span>
+          </a>
         </div>
-
       </div>
     </section>
   );

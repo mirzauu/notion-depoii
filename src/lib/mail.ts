@@ -19,8 +19,10 @@ function isLocalHostname(hostHeader: string | null): boolean {
   );
 }
 
-/** Returns true when running in local development or served from a local host. */
+/** Returns true when running in local development without SMTP. */
 export function isLocalRuntime(req?: Request): boolean {
+  // If SMTP is configured, allow email delivery
+  if (smtpConfigured()) return false;
   if (process.env.ENABLE_LOCAL_EMAIL === "true") return false;
   if (process.env.NODE_ENV !== "production") return true;
   if (!req) return false;

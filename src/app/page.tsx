@@ -1,9 +1,9 @@
 import { Navbar } from "@/components/Navbar";
 import { Hero } from "@/components/Hero";
-import { HowDepoiiThinks } from "@/components/HowDepoiiThinks";
+import { WorkspaceDemo } from "@/components/WorkspaceDemo";
+import { AIEngineSection } from "@/components/AIEngineSection";
 import { LeadPipelineFinder } from "@/components/LeadPipelineFinder";
-import { CTASection } from "@/components/CTASection";
-import { FAQ } from "@/components/FAQ";
+// import { FAQ } from "@/components/FAQ";
 import { Footer } from "@/components/Footer";
 import { VisitorTracker } from "@/components/VisitorTracker";
 
@@ -13,10 +13,10 @@ export default function Home() {
       <VisitorTracker />
       <Navbar />
       <Hero />
-      <HowDepoiiThinks />
+      <AIEngineSection />
+      <WorkspaceDemo />
       <LeadPipelineFinder />
-      <CTASection />
-      <FAQ />
+      {/* <FAQ /> */}
       <Footer />
     </main>
   );
