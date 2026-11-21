@@ -89,13 +89,6 @@ export function Navbar() {
             {/* Desktop Nav Items */}
             <nav className="hidden md:flex items-center gap-1">
               <Link
-                href="#ai-engine"
-                prefetch={false}
-                className="px-3 py-1.5 text-[14px] font-medium text-neutral-700 hover:text-neutral-950 rounded-md hover:bg-neutral-100/70 transition-colors"
-              >
-                AI Engine
-              </Link>
-              <Link
                 href="#platform"
                 prefetch={false}
                 className="px-3 py-1.5 text-[14px] font-medium text-neutral-700 hover:text-neutral-950 rounded-md hover:bg-neutral-100/70 transition-colors"
@@ -103,11 +96,25 @@ export function Navbar() {
                 Workspace
               </Link>
               <Link
+                href="#ai-engine"
+                prefetch={false}
+                className="px-3 py-1.5 text-[14px] font-medium text-neutral-700 hover:text-neutral-950 rounded-md hover:bg-neutral-100/70 transition-colors"
+              >
+                AI Engine
+              </Link>
+              <Link
                 href="#pipeline-finder"
                 prefetch={false}
                 className="px-3 py-1.5 text-[14px] font-medium text-neutral-700 hover:text-neutral-950 rounded-md hover:bg-neutral-100/70 transition-colors"
               >
                 Live Pipeline
+              </Link>
+              <Link
+                href="#pricing"
+                prefetch={false}
+                className="px-3 py-1.5 text-[14px] font-medium text-neutral-700 hover:text-neutral-950 rounded-md hover:bg-neutral-100/70 transition-colors"
+              >
+                Pricing
               </Link>
             </nav>
           </div>
@@ -149,14 +156,6 @@ export function Navbar() {
         {mobileMenuOpen && (
           <div className="md:hidden pointer-events-auto max-w-[1240px] mx-auto mt-2 bg-white rounded-2xl border border-neutral-200 shadow-xl px-5 py-4 space-y-3 animate-in fade-in slide-in-from-top-2 duration-150">
             <Link
-              href="#ai-engine"
-              prefetch={false}
-              onClick={() => setMobileMenuOpen(false)}
-              className="block text-[15px] font-medium text-black py-2"
-            >
-              AI Engine
-            </Link>
-            <Link
               href="#platform"
               prefetch={false}
               onClick={() => setMobileMenuOpen(false)}
@@ -165,12 +164,28 @@ export function Navbar() {
               Workspace
             </Link>
             <Link
+              href="#ai-engine"
+              prefetch={false}
+              onClick={() => setMobileMenuOpen(false)}
+              className="block text-[15px] font-medium text-black py-2"
+            >
+              AI Engine
+            </Link>
+            <Link
               href="#pipeline-finder"
               prefetch={false}
               onClick={() => setMobileMenuOpen(false)}
               className="block text-[15px] font-medium text-black py-2"
             >
               Live Pipeline
+            </Link>
+            <Link
+              href="#pricing"
+              prefetch={false}
+              onClick={() => setMobileMenuOpen(false)}
+              className="block text-[15px] font-medium text-black py-2"
+            >
+              Pricing
             </Link>
             <button
               type="button"
