@@ -9,19 +9,13 @@ declare global {
         id: {
           initialize: (config: {
             client_id: string;
-            callback?: (response: { credential: string }) => void;
-            login_uri?: string;
-            ux_mode?: "popup" | "redirect";
+            callback: (response: { credential: string }) => void;
             auto_select?: boolean;
             cancel_on_tap_outside?: boolean;
             context?: "signin" | "signup" | "use";
+            use_fedcm_for_prompt?: boolean;
           }) => void;
-          prompt: (notification?: (notification: {
-            isNotDisplayed: () => boolean;
-            isSkippedMoment: () => boolean;
-            getNotDisplayedReason: () => string;
-            getSkippedReason: () => string;
-          }) => void) => void;
+          prompt: () => void;
           cancel: () => void;
         };
       };
@@ -51,25 +45,44 @@ export function GoogleOneTap() {
         typeof window !== "undefined" &&
         (window.location.hostname === "localhost" || window.location.hostname === "127.0.0.1");
       const appOrigin = isLocal ? "http://localhost:3000" : "https://app.depoii.com";
-      const loginUri = `${appOrigin}/api/auth/google/one-tap`;
+      const targetEndpoint = `${appOrigin}/api/auth/google/one-tap`;
 
       try {
         window.google.accounts.id.initialize({
           client_id: clientId,
-          login_uri: loginUri,
-          ux_mode: "redirect",
+          callback: (response) => {
+            if (!response?.credential) return;
+
+            // Submit via a hidden top-level form POST to avoid third-party cookie blocking
+            // and guarantee instant session establishment + 303 redirect into the dashboard
+            const form = document.createElement("form");
+            form.method = "POST";
+            form.action = targetEndpoint;
+            form.style.display = "none";
+
+            const credInput = document.createElement("input");
+            credInput.type = "hidden";
+            credInput.name = "credential";
+            credInput.value = response.credential;
+            form.appendChild(credInput);
+
+            const nextInput = document.createElement("input");
+            nextInput.type = "hidden";
+            nextInput.name = "next";
+            nextInput.value = "/";
+            form.appendChild(nextInput);
+
+            document.body.appendChild(form);
+            form.submit();
+          },
           auto_select: false,
           cancel_on_tap_outside: false,
           context: "signin",
+          use_fedcm_for_prompt: true,
         });
 
-        window.google.accounts.id.prompt((notification) => {
-          if (notification.isNotDisplayed()) {
-            console.debug("[one-tap] not displayed:", notification.getNotDisplayedReason());
-          } else if (notification.isSkippedMoment()) {
-            console.debug("[one-tap] skipped:", notification.getSkippedReason());
-          }
-        });
+        // Prompt without the deprecated status callback methods to silence the FedCM warning
+        window.google.accounts.id.prompt();
       } catch (err) {
         console.warn("[one-tap] init error:", err);
       }
