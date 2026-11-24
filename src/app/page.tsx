@@ -7,10 +7,12 @@ import { PricingSection } from "@/components/PricingSection";
 // import { FAQ } from "@/components/FAQ";
 import { Footer } from "@/components/Footer";
 import { VisitorTracker } from "@/components/VisitorTracker";
+import { GoogleOneTap } from "@/components/GoogleOneTap";
 
 export default function Home() {
   return (
     <main className="min-h-screen bg-white">
+      <GoogleOneTap />
       <VisitorTracker />
       <Navbar />
       <Hero />
