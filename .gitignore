@@ -43,3 +43,6 @@ RECONSTRUCTION_REPORT.md
 # runtime visitor data logs
 /data/
 *.jsonl
+
+# temporary skills/scratch files
+/.taste-skill/

@@ -4,14 +4,20 @@ import { WorkspaceDemo } from "@/components/WorkspaceDemo";
 import { AIEngineSection } from "@/components/AIEngineSection";
 import { LeadPipelineFinder } from "@/components/LeadPipelineFinder";
 import { PricingSection } from "@/components/PricingSection";
-// import { FAQ } from "@/components/FAQ";
 import { Footer } from "@/components/Footer";
 import { VisitorTracker } from "@/components/VisitorTracker";
 import { GoogleOneTap } from "@/components/GoogleOneTap";
+import { getLandingJsonLd } from "@/lib/seo";
 
 export default function Home() {
+  const jsonLd = getLandingJsonLd();
+
   return (
-    <main className="min-h-screen bg-white">
+    <main className="min-h-[100svh] bg-white">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
       <GoogleOneTap />
       <VisitorTracker />
       <Navbar />
@@ -20,10 +26,7 @@ export default function Home() {
       <AIEngineSection />
       <LeadPipelineFinder />
       <PricingSection />
-      {/* <FAQ /> */}
       <Footer />
     </main>
   );
 }
-
-

@@ -2,49 +2,42 @@
 
 import React, { useState, useEffect } from "react";
 import Image from "next/image";
-import Link from "next/link";
-import { Tag, Crosshair, Eye, DollarSign } from "lucide-react";
+import { Tag, Crosshair, Eye, Target } from "lucide-react";
 
-// Rotating action badge in hero heading
 const rotatingBadges = [
   {
-    word: "Audit",
+    word: "Target",
     bg: "#ffdec4",
-    text: "#c2410c",
-    border: "#fed7aa",
-    icon: Tag,
+    text: "#9a3412",
+    icon: Target,
   },
   {
     word: "Spot",
-    bg: "#f1f5f9",
+    bg: "#e2e8f0",
     text: "#0f172a",
-    border: "#cbd5e1",
     icon: Crosshair,
   },
   {
     word: "Inspect",
     bg: "#e0f2fe",
-    text: "#0369a1",
-    border: "#bae6fd",
+    text: "#075985",
     icon: Eye,
   },
   {
-    word: "Price",
-    bg: "#fef3c7",
-    text: "#b45309",
-    border: "#fde68a",
-    icon: DollarSign,
+    word: "Win",
+    bg: "#dcfce7",
+    text: "#166534",
+    icon: Tag,
   },
 ];
 
 export function Hero() {
   const [badgeIndex, setBadgeIndex] = useState(0);
 
-  // Auto-rotate badge in headline
   useEffect(() => {
     const timer = setInterval(() => {
       setBadgeIndex((prev) => (prev + 1) % rotatingBadges.length);
-    }, 1200);
+    }, 1500);
     return () => clearInterval(timer);
   }, []);
 
@@ -52,44 +45,38 @@ export function Hero() {
   const BadgeIcon = currentBadge.icon;
 
   return (
-    <section className="relative -mt-16 sm:-mt-[68px] min-h-[88vh] sm:min-h-[94vh] flex items-center justify-center pt-32 pb-32 sm:pt-40 sm:pb-44 overflow-hidden">
-      {/* Full Background Aerial Roof Image */}
-      <div className="pointer-events-none absolute inset-0 z-0">
+    <section className="relative -mt-16 sm:-mt-[68px] min-h-[84svh] sm:min-h-[88svh] flex items-center justify-center pt-28 pb-24 sm:pt-36 sm:pb-32 overflow-hidden bg-[#f5f5f4]">
+      {/* Full Background Aerial Roof Image with subtle drift */}
+      <div className="pointer-events-none absolute inset-0 z-0 overflow-hidden">
         <Image
           src="/landing/hero-roof.jpg"
-          alt="Commercial roofs in Dallas Fort Worth"
+          alt="Commercial warehouse roofs across Dallas Fort Worth"
           fill
           priority
           sizes="100vw"
-          className="object-cover object-[center_40%]"
+          className="object-cover object-[center_42%] hero-aerial-motion"
         />
       </div>
 
-      {/* Atmospheric Light Gradient Overlay */}
-      <div className="pointer-events-none absolute inset-0 z-0 bg-[linear-gradient(180deg,rgba(255,255,255,0.65)_0%,rgba(255,255,255,0.28)_40%,rgba(255,255,255,0.68)_85%,#ffffff_100%)]" />
+      {/* Flat Atmospheric Light Scrim for guaranteed text contrast */}
+      <div className="pointer-events-none absolute inset-0 z-0 bg-white/75" />
 
-      <div className="relative z-10 max-w-[1360px] mx-auto px-4 sm:px-6 lg:px-8 text-center flex flex-col items-center">
-        
-        {/* Hero Heading with dynamic action pill and Depoii brand underline */}
-        <h1 className="text-[40px] sm:text-[60px] lg:text-[76px] font-bold text-neutral-950 tracking-[-0.035em] leading-[1.12] max-w-[1100px] mx-auto">
-          Where commercial roofers{" "}
-          <span
-            className="inline-flex items-center gap-1.5 px-3.5 sm:px-5 py-0.5 sm:py-1 rounded-full transition-all duration-200 align-middle shadow-xs border bg-white"
+      <div className="relative z-10 w-full max-w-[1240px] mx-auto px-5 sm:px-8 text-center flex flex-col items-center">
+        <h1 className="text-[34px] sm:text-[52px] lg:text-[64px] font-bold text-[#111110] tracking-[-0.035em] leading-[1.08] max-w-[900px] mx-auto">
+          <span className="inline-flex items-center gap-1.5 px-3.5 sm:px-5 py-0.5 sm:py-1 rounded-full transition-colors duration-200 align-middle"
             style={{
               backgroundColor: currentBadge.bg,
               color: currentBadge.text,
-              borderColor: currentBadge.border,
             }}
           >
-            <BadgeIcon className="w-4 h-4 shrink-0" />
+            <BadgeIcon className="w-4 h-4 sm:w-5 sm:h-5 shrink-0" />
             <span className="font-semibold">{currentBadge.word}</span>
           </span>{" "}
           the{" "}
-          <span className="relative inline-block text-neutral-950">
-            next
-            {/* Depoii Signature Coral / Amber Underline */}
+          <span className="relative inline-block text-[#111110]">
+            right
             <svg
-              className="absolute -bottom-2 sm:-bottom-3 left-0 w-full h-3 sm:h-4 text-[#FF9C6D] pointer-events-none overflow-visible"
+              className="absolute -bottom-1.5 sm:-bottom-2.5 left-0 w-full h-3 sm:h-3.5 text-[#FF9C6D] pointer-events-none overflow-visible"
               viewBox="0 0 160 16"
               fill="none"
               preserveAspectRatio="none"
@@ -103,17 +90,16 @@ export function Hero() {
                 strokeLinejoin="round"
               />
             </svg>
-          </span>{" "}
-          job.
+          </span>
+          <br />
+          commercial roofs.
         </h1>
 
-        {/* Sharpened Subtitle: Autonomous Discovery & High-Conviction Value (Flaw 2) */}
-        <p className="mt-6 text-[18px] sm:text-[21px] text-neutral-700 max-w-[820px] mx-auto font-normal leading-[1.45]">
-          The vertical AI engine that continuously monitors 70,000+ DFW commercial properties. Correlating NEXRAD hail swaths against aging single-ply membranes to uncover high-value unpermitted roof replacements — before competitors even know the storm hit.
+        <p className="mt-7 text-[16px] sm:text-[18px] text-[#262523] max-w-[660px] mx-auto font-normal leading-[1.55]">
+          Tell Depoii your ideal building size, DFW corridor, and roof system. It scans 70,000+ commercial roofs to surface properties overdue for replacement or hit by recent storms, before they go to bid.
         </p>
 
-        {/* CTA in Depoii Theme */}
-        <div className="mt-8 flex flex-col items-center justify-center gap-3 w-full sm:w-auto">
+        <div className="mt-8 flex flex-col items-center justify-center gap-3.5 w-full sm:w-auto">
           <button
             type="button"
             onClick={() => {
@@ -121,20 +107,15 @@ export function Hero() {
                 window.dispatchEvent(new CustomEvent("open-trial"));
               }
             }}
-            className="w-full sm:w-auto px-8 py-3.5 rounded-full text-white font-semibold text-[15px] bg-neutral-950 hover:bg-neutral-800 transition-all shadow-[0_4px_20px_rgba(0,0,0,0.22)] hover:shadow-[0_6px_26px_rgba(0,0,0,0.3)] active:scale-[0.98] flex items-center justify-center gap-2 group cursor-pointer"
+            className="w-full sm:w-auto h-12 px-8 rounded-full text-white font-semibold text-[16px] bg-[#111110] hover:bg-[#2b2a28] transition-[transform,background-color] duration-150 active:scale-[0.98] flex items-center justify-center gap-2 group cursor-pointer"
           >
-            <span>Start free trial</span>
-            <span className="transition-transform duration-200 group-hover:translate-x-1">→</span>
+            <span>Get My 10-Roof Territory Brief</span>
+            <span className="transition-transform duration-150 group-hover:translate-x-1">→</span>
           </button>
-          
-          {/* Micro-trust signals */}
-          <div className="flex items-center gap-2 text-[12px] text-neutral-500 font-medium">
-            <span>Instant DFW pipeline access</span>
-            <span>·</span>
-            <span>No credit card required</span>
-            <span>·</span>
-            <span className="text-neutral-700 font-semibold">Territory locked upon reservation</span>
-          </div>
+
+          <p className="text-[14px] text-[#3f3e3b] font-medium">
+            Custom-built for your DFW corridors · Delivered within 24 hours · No card required
+          </p>
         </div>
       </div>
     </section>

@@ -66,147 +66,129 @@ export function Navbar() {
 
   return (
     <>
-      {/* Outer container: allows background image to show on left & right of hanging header */}
-      <header className="sticky top-0 z-50 w-full pointer-events-none px-3 sm:px-6 lg:px-8">
-        {/* Floating hanging island header exactly like Clay */}
+      <header className="sticky top-0 z-50 w-full pointer-events-none px-5 sm:px-8">
         <div
-          className={`max-w-[1240px] mx-auto pointer-events-auto bg-white/95 backdrop-blur-md rounded-b-[20px] sm:rounded-b-[24px] border-b border-x px-4 sm:px-7 h-16 sm:h-[68px] flex items-center justify-between transition-all duration-200 ${
+          className={`max-w-[1240px] mx-auto pointer-events-auto bg-white/95 backdrop-blur-md rounded-b-[20px] px-4 sm:px-7 h-16 sm:h-[68px] flex items-center justify-between transition-[box-shadow,background-color] duration-200 ${
             scrolled
-              ? "bg-white border-neutral-300 shadow-[0_12px_40px_rgba(0,0,0,0.09)]"
-              : "bg-white border-neutral-200/90 shadow-[0_8px_30px_rgba(0,0,0,0.06)]"
+              ? "bg-white shadow-[0_10px_32px_rgba(0,0,0,0.08)]"
+              : "bg-white/95 shadow-[0_6px_24px_rgba(0,0,0,0.05)]"
           }`}
         >
-          
-          {/* Left: Logo & Nav items */}
           <div className="flex items-center gap-6 lg:gap-8">
             <Link href="/" prefetch={false} className="flex items-center gap-2.5 group shrink-0">
-              <DepoiiMark className="w-7 h-7 text-neutral-950 transition-transform group-hover:scale-105" />
-              <span className="font-bold text-[1.35rem] tracking-tight text-neutral-950">
+              <DepoiiMark className="w-7 h-7 text-[#111110] transition-transform duration-150 group-hover:scale-105" />
+              <span className="font-bold text-[1.35rem] tracking-tight text-[#111110]">
                 Depoii
               </span>
             </Link>
 
-            {/* Desktop Nav Items */}
-            <nav className="hidden md:flex items-center gap-1">
+            <nav className="hidden lg:flex items-center gap-1 whitespace-nowrap" aria-label="Primary navigation">
               <Link
                 href="#platform"
                 prefetch={false}
-                className="px-3 py-1.5 text-[14px] font-medium text-neutral-700 hover:text-neutral-950 rounded-md hover:bg-neutral-100/70 transition-colors"
+                className="px-3 py-1.5 text-[14px] font-medium text-[#4a4845] hover:text-[#111110] rounded-full hover:bg-[#f5f5f4] transition-colors duration-150"
               >
-                Workspace
+                Target Matcher
               </Link>
               <Link
                 href="#ai-engine"
                 prefetch={false}
-                className="px-3 py-1.5 text-[14px] font-medium text-neutral-700 hover:text-neutral-950 rounded-md hover:bg-neutral-100/70 transition-colors"
+                className="px-3 py-1.5 text-[14px] font-medium text-[#4a4845] hover:text-[#111110] rounded-full hover:bg-[#f5f5f4] transition-colors duration-150"
               >
-                AI Engine
+                How It Picks
               </Link>
               <Link
                 href="#pipeline-finder"
                 prefetch={false}
-                className="px-3 py-1.5 text-[14px] font-medium text-neutral-700 hover:text-neutral-950 rounded-md hover:bg-neutral-100/70 transition-colors"
+                className="px-3 py-1.5 text-[14px] font-medium text-[#4a4845] hover:text-[#111110] rounded-full hover:bg-[#f5f5f4] transition-colors duration-150"
               >
-                Live Pipeline
+                DFW Roofs
               </Link>
               <Link
                 href="#pricing"
                 prefetch={false}
-                className="px-3 py-1.5 text-[14px] font-medium text-neutral-700 hover:text-neutral-950 rounded-md hover:bg-neutral-100/70 transition-colors"
+                className="px-3 py-1.5 text-[14px] font-medium text-[#4a4845] hover:text-[#111110] rounded-full hover:bg-[#f5f5f4] transition-colors duration-150"
               >
                 Pricing
               </Link>
             </nav>
           </div>
 
-          {/* Right: Get a demo, Start free trial */}
-          <div className="hidden sm:flex items-center gap-3">
-            {/* Get a demo (Light gray pill) */}
+          <div className="hidden sm:flex items-center gap-2.5 shrink-0 whitespace-nowrap">
             <button
               type="button"
               onClick={() => setDemoModalOpen(true)}
-              className="px-4 py-2 text-[13.5px] font-medium text-neutral-900 bg-[#f4f5f6] hover:bg-[#eaecee] border border-neutral-200/70 rounded-full transition-all cursor-pointer shadow-2xs"
+              className="px-4 py-2 text-[14px] font-medium text-[#111110] bg-[#f5f5f4] hover:bg-[#e7e5e4] rounded-full transition-colors duration-150 cursor-pointer"
             >
-              Get a demo
+              Book walkthrough
             </button>
 
-            {/* Start free trial (Black pill) */}
             <button
               type="button"
               onClick={() => setTrialModalOpen(true)}
-              className="px-4 py-2 text-[13.5px] font-semibold rounded-full text-white bg-neutral-950 hover:bg-neutral-800 transition-all shadow-sm active:scale-[0.98] cursor-pointer"
+              className="px-4 py-2 text-[14px] font-semibold rounded-full text-white bg-[#111110] hover:bg-[#2b2a28] transition-[transform,background-color] duration-150 active:scale-[0.98] cursor-pointer"
             >
-              Start free trial
+              Get 10-Roof Brief
             </button>
           </div>
 
-          {/* Mobile menu toggle */}
-          <div className="md:hidden flex items-center gap-2">
+          <div className="lg:hidden flex items-center gap-2 shrink-0">
             <button
+              type="button"
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              className="p-1.5 text-neutral-800 hover:text-black rounded-md"
+              className="p-2 text-[#111110] hover:bg-[#f5f5f4] rounded-full transition-colors duration-150"
               aria-label="Toggle menu"
+              aria-expanded={mobileMenuOpen}
             >
               {mobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
             </button>
           </div>
         </div>
 
-        {/* Mobile Menu Dropdown */}
         {mobileMenuOpen && (
-          <div className="md:hidden pointer-events-auto max-w-[1240px] mx-auto mt-2 bg-white rounded-2xl border border-neutral-200 shadow-xl px-5 py-4 space-y-3 animate-in fade-in slide-in-from-top-2 duration-150">
+          <div className="lg:hidden pointer-events-auto max-w-[1240px] mx-auto mt-2 bg-white rounded-2xl shadow-xl px-5 py-4 space-y-2">
             <Link
               href="#platform"
               prefetch={false}
               onClick={() => setMobileMenuOpen(false)}
-              className="block text-[15px] font-medium text-black py-2"
+              className="block text-[15px] font-medium text-[#111110] py-2"
             >
-              Workspace
+              Target Matcher
             </Link>
             <Link
               href="#ai-engine"
               prefetch={false}
               onClick={() => setMobileMenuOpen(false)}
-              className="block text-[15px] font-medium text-black py-2"
+              className="block text-[15px] font-medium text-[#111110] py-2"
             >
-              AI Engine
+              How It Picks
             </Link>
             <Link
               href="#pipeline-finder"
               prefetch={false}
               onClick={() => setMobileMenuOpen(false)}
-              className="block text-[15px] font-medium text-black py-2"
+              className="block text-[15px] font-medium text-[#111110] py-2"
             >
-              Live Pipeline
+              DFW Roofs
             </Link>
             <Link
               href="#pricing"
               prefetch={false}
               onClick={() => setMobileMenuOpen(false)}
-              className="block text-[15px] font-medium text-black py-2"
+              className="block text-[15px] font-medium text-[#111110] py-2"
             >
               Pricing
             </Link>
-            <button
-              type="button"
-              onClick={() => {
-                setMobileMenuOpen(false);
-                setDemoModalOpen(true);
-              }}
-              className="w-full text-left text-[15px] font-medium text-black py-2 cursor-pointer"
-            >
-              Demo Preview
-            </button>
-            <div className="pt-3 border-t border-black/[0.06] flex flex-col gap-2">
+            <div className="pt-3 flex flex-col gap-2.5">
               <button
                 type="button"
                 onClick={() => {
                   setMobileMenuOpen(false);
                   setDemoModalOpen(true);
                 }}
-                className="w-full py-2.5 text-center font-medium rounded-full text-neutral-900 bg-[#f4f5f6] hover:bg-[#eaecee] border border-neutral-200/70 block shadow-2xs cursor-pointer"
+                className="w-full py-2.5 text-center font-medium rounded-full text-[#111110] bg-[#f5f4f1] hover:bg-[#ebe9e4] transition-colors duration-150 cursor-pointer"
               >
-                Get a demo
+                Book walkthrough
               </button>
               <button
                 type="button"
@@ -214,19 +196,16 @@ export function Navbar() {
                   setMobileMenuOpen(false);
                   setTrialModalOpen(true);
                 }}
-                className="w-full py-2.5 text-center font-semibold rounded-full text-white bg-neutral-950 hover:bg-neutral-800 block shadow-sm cursor-pointer"
+                className="w-full py-2.5 text-center font-semibold rounded-full text-white bg-[#111110] hover:bg-[#2b2a28] transition-colors duration-150 cursor-pointer"
               >
-                Start free trial
+                Get 10-Roof Brief
               </button>
             </div>
           </div>
         )}
       </header>
 
-      {/* Clay-style Get a Demo Modal */}
       <DemoModal isOpen={demoModalOpen} onClose={() => setDemoModalOpen(false)} />
-
-      {/* Software Preview Trial Demo Modal (Exact Live Software UI in background + Email Box) */}
       <TrialDemoModal isOpen={trialModalOpen} onClose={() => setTrialModalOpen(false)} />
     </>
   );
