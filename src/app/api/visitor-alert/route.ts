@@ -2,8 +2,31 @@ import { NextRequest, NextResponse } from "next/server";
 import fs from "fs";
 import path from "path";
 import { isLocalRuntime, sendMail, smtpConfigured } from "@/lib/mail";
+import { SITE_URL } from "@/lib/seo";
 
 export const dynamic = "force-dynamic";
+
+const HIGH_INTENT_PATTERNS = [
+  "10-Roof",
+  "Territory Brief",
+  "Include in My Brief",
+  "Owner Brief",
+  "Corridor to Brief",
+  "Starter Plan",
+  "Growth Plan",
+  "Book walkthrough",
+  "Reserve Enterprise Territory",
+  "Talk to our territory team",
+  "open-trial",
+  "open-demo",
+  "Typed in email",
+  "Claim",
+];
+
+function isHighIntentAction(text?: string): boolean {
+  if (!text) return false;
+  return HIGH_INTENT_PATTERNS.some((pattern) => text.includes(pattern));
+}
 
 const TARGET_EMAIL = process.env.PILOT_NOTIFY_EMAIL || "mirzamailbox0@gmail.com";
 const COOLDOWN_MS = 15 * 60 * 1000;
@@ -301,15 +324,15 @@ export async function POST(req: NextRequest) {
 
     const isHighIntent =
       eventType === "form_intent" ||
-      body.actionDetail?.includes("Start free trial") ||
-      body.actionDetail?.includes("Get a demo") ||
-      body.actionDetail?.includes("Typed in email") ||
+      isHighIntentAction(body.actionDetail) ||
       storedBatch.some(
         (a) =>
           a.category === "input" ||
-          a.label.includes("Start free trial") ||
-          a.label.includes("Get a demo")
+          a.category === "modal" ||
+          isHighIntentAction(a.label)
       );
+
+    const feedBaseUrl = isLocalRuntime(req) ? req.nextUrl.origin : SITE_URL;
 
     // Only email on high intent or significant dwell milestones
     if (!isHighIntent && eventType !== "visit" && (eventType !== "dwell" || dwellSeconds < 45)) {
@@ -408,7 +431,7 @@ export async function POST(req: NextRequest) {
           </tr>
           <tr>
             <td style="padding: 6px 8px; font-weight: 600; color: #64748b;">Live Radar Feed</td>
-            <td style="padding: 6px 8px; color: #0f172a;"><a href="http://localhost:3001/api/visitor-alert" style="color: #FF9C6D; text-decoration: underline;">Open Live Action Stream →</a></td>
+            <td style="padding: 6px 8px; color: #0f172a;"><a href="${feedBaseUrl}/api/visitor-alert" style="color: #FF9C6D; text-decoration: underline;">Open Live Action Stream →</a></td>
           </tr>
         </tbody>
       </table>

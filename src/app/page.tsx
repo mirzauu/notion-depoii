@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import { Navbar } from "@/components/Navbar";
 import { Hero } from "@/components/Hero";
 import { WorkspaceDemo } from "@/components/WorkspaceDemo";
@@ -7,7 +8,19 @@ import { PricingSection } from "@/components/PricingSection";
 import { Footer } from "@/components/Footer";
 import { VisitorTracker } from "@/components/VisitorTracker";
 import { GoogleOneTap } from "@/components/GoogleOneTap";
-import { getLandingJsonLd } from "@/lib/seo";
+import {
+  buildPageMetadata,
+  getLandingJsonLd,
+  SITE_DESCRIPTION,
+  SITE_TITLE,
+} from "@/lib/seo";
+
+export const metadata: Metadata = buildPageMetadata({
+  title: SITE_TITLE,
+  description: SITE_DESCRIPTION,
+  path: "/",
+  absoluteTitle: true,
+});
 
 export default function Home() {
   const jsonLd = getLandingJsonLd();

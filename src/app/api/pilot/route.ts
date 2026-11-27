@@ -1,4 +1,4 @@
-import { isLocalRuntime, sendMail, smtpConfigured } from "@/lib/mail";
+import { sendMail, smtpConfigured } from "@/lib/mail";
 
 export const dynamic = "force-dynamic";
 

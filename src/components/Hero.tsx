@@ -53,6 +53,8 @@ export function Hero() {
           alt="Commercial warehouse roofs across Dallas Fort Worth"
           fill
           priority
+          fetchPriority="high"
+          quality={75}
           sizes="100vw"
           className="object-cover object-[center_42%] hero-aerial-motion"
         />
@@ -63,7 +65,7 @@ export function Hero() {
 
       <div className="relative z-10 w-full max-w-[1240px] mx-auto px-5 sm:px-8 text-center flex flex-col items-center">
         <h1 className="text-[34px] sm:text-[52px] lg:text-[64px] font-bold text-[#111110] tracking-[-0.035em] leading-[1.08] max-w-[900px] mx-auto">
-          <span className="inline-flex items-center gap-1.5 px-3.5 sm:px-5 py-0.5 sm:py-1 rounded-full transition-colors duration-200 align-middle"
+          <span className="inline-flex items-center gap-1.5 px-3.5 sm:px-5 py-0.5 sm:py-1 rounded-full align-middle"
             style={{
               backgroundColor: currentBadge.bg,
               color: currentBadge.text,
@@ -90,7 +92,7 @@ export function Hero() {
                 strokeLinejoin="round"
               />
             </svg>
-          </span>
+          </span>{" "}
           <br />
           commercial roofs.
         </h1>

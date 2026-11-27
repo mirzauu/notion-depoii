@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { DM_Sans } from "next/font/google";
 import "./globals.css";
+import { AnalyticsScripts } from "@/components/AnalyticsScripts";
 import {
   OG_IMAGE_PATH,
   SITE_DESCRIPTION,
@@ -18,11 +19,11 @@ const dmSans = DM_Sans({
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
-  title: SITE_TITLE,
-  description: SITE_DESCRIPTION,
-  alternates: {
-    canonical: "/",
+  title: {
+    default: SITE_TITLE,
+    template: "%s | Depoii",
   },
+  description: SITE_DESCRIPTION,
   robots: {
     index: true,
     follow: true,
@@ -37,7 +38,6 @@ export const metadata: Metadata = {
   openGraph: {
     type: "website",
     locale: "en_US",
-    url: "/",
     siteName: SITE_NAME,
     title: SITE_TITLE,
     description: SITE_DESCRIPTION,
@@ -74,6 +74,7 @@ export default function RootLayout({
   return (
     <html lang="en" className={dmSans.variable}>
       <body className="font-sans antialiased text-[#171615] bg-white selection:bg-[#ffdec4]">
+        <AnalyticsScripts />
         {children}
       </body>
     </html>

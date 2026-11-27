@@ -14,6 +14,7 @@ import {
 } from "lucide-react";
 import { DepoiiMark } from "./DepoiiLogo";
 import { getOrCreateVisitorId, logVisitorEvent } from "./VisitorTracker";
+import { trackGenerateLead } from "@/lib/analytics";
 
 interface TrialDemoModalProps {
   isOpen: boolean;
@@ -108,6 +109,12 @@ export function TrialDemoModal({ isOpen, onClose }: TrialDemoModalProps) {
         throw new Error(errBody.error || "Could not submit your brief request.");
       }
 
+      trackGenerateLead({
+        leadType: "trial_brief",
+        source: "10-Roof Territory Brief Modal",
+        territory: trimmedTerritory,
+        sizeRange,
+      });
       logVisitorEvent("interaction", {
         actionDetail: `Requested 10-Roof Brief for ${trimmedCompany} (${trimmedTerritory})`,
       });

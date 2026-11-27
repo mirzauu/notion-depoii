@@ -5,21 +5,9 @@ import Link from "next/link";
 import {
   Calendar,
   Building2,
-  CloudHail,
-  ShieldCheck,
-  FileText,
-  CheckCircle2,
   ArrowRight,
-  Search,
-  AlertTriangle,
-  TrendingUp,
-  UserCheck,
-  Layers,
-  Eye,
-  Clock,
   Sparkles,
   ChevronRight,
-  ExternalLink,
   ChevronLeft,
 } from "lucide-react";
 

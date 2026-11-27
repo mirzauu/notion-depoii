@@ -5,6 +5,7 @@ import Link from "next/link";
 import { X, CheckCircle2, ArrowRight } from "lucide-react";
 import { DepoiiMark } from "./DepoiiLogo";
 import { getOrCreateVisitorId, logVisitorEvent } from "./VisitorTracker";
+import { trackGenerateLead } from "@/lib/analytics";
 
 interface DemoModalProps {
   isOpen: boolean;
@@ -94,6 +95,12 @@ export function DemoModal({ isOpen, onClose }: DemoModalProps) {
       }
 
       setIsSubmitted(true);
+      trackGenerateLead({
+        leadType: "walkthrough_demo",
+        source: "Walkthrough Request Form",
+        territory: territory.trim() || "Dallas–Fort Worth, TX",
+        sizeRange: "Enterprise Commercial / Industrial",
+      });
       logVisitorEvent("interaction", {
         actionDetail: `Completed Walkthrough request for ${email.trim()}`,
       });
@@ -105,7 +112,12 @@ export function DemoModal({ isOpen, onClose }: DemoModalProps) {
   };
 
   return (
-    <div className="fixed inset-0 z-50 overflow-y-auto bg-[#f5f5f4]">
+    <div
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="demo-modal-title"
+      className="fixed inset-0 z-50 overflow-y-auto bg-[#f5f5f4]"
+    >
       <button
         onClick={handleClose}
         type="button"
@@ -136,9 +148,12 @@ export function DemoModal({ isOpen, onClose }: DemoModalProps) {
 
       <div className="max-w-[760px] mx-auto px-5 pt-10 sm:pt-14 pb-16 sm:pb-24">
         <div className="bg-white rounded-[28px] p-8 sm:p-12 text-left">
-          <h1 className="text-[32px] sm:text-[44px] font-bold text-[#111110] tracking-[-0.035em] leading-[1.1]">
+          <h2
+            id="demo-modal-title"
+            className="text-[32px] sm:text-[44px] font-bold text-[#111110] tracking-[-0.035em] leading-[1.1]"
+          >
             Book a DFW territory walkthrough
-          </h1>
+          </h2>
 
           <p className="mt-4 text-[16px] text-[#4a4845] leading-relaxed max-w-xl">
             We will pull live commercial roofs matching your crew’s square footage and DFW corridors so your estimating team sees real opportunities on the call.
@@ -149,7 +164,7 @@ export function DemoModal({ isOpen, onClose }: DemoModalProps) {
               <div className="w-11 h-11 rounded-full bg-white text-[#14532d] flex items-center justify-center mb-4">
                 <CheckCircle2 className="w-6 h-6" />
               </div>
-              <h2 className="text-[22px] font-bold text-[#111110]">Walkthrough request received.</h2>
+              <h3 className="text-[22px] font-bold text-[#111110]">Walkthrough request received.</h3>
               <p className="mt-2 text-[#262523] text-[15px] leading-relaxed max-w-lg">
                 We will reach out to <strong>{email}</strong> within 1 business day with territory availability and a live walkthrough for your corridors.
               </p>

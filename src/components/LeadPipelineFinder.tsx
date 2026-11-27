@@ -147,6 +147,7 @@ export function LeadPipelineFinder() {
                         src={lead.image}
                         alt={lead.name}
                         fill
+                        sizes="(max-width: 640px) 330px, 390px"
                         className="object-cover"
                       />
 

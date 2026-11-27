@@ -1,6 +1,12 @@
 "use client";
 
-import React, { useEffect, useRef, useState } from "react";
+import React, {
+  useCallback,
+  useEffect,
+  useRef,
+  useState,
+  useSyncExternalStore,
+} from "react";
 
 const VID_KEY = "depoii_vid";
 const VISIT_COUNT_KEY = "depoii_visit_count";
@@ -16,6 +22,62 @@ export interface MicroAction {
   category: "click" | "scroll" | "section" | "input" | "copy" | "modal";
   label: string;
   detail?: string;
+}
+
+const HIGH_INTENT_CTA_PATTERNS = [
+  "10-Roof",
+  "Territory Brief",
+  "Include in My Brief",
+  "Owner Brief",
+  "Corridor to Brief",
+  "Starter Plan",
+  "Growth Plan",
+  "Book walkthrough",
+  "Reserve Enterprise Territory",
+  "Talk to our territory team",
+  "open-trial",
+  "open-demo",
+  "Claim",
+];
+
+function isHighIntentCta(label: string): boolean {
+  return HIGH_INTENT_CTA_PATTERNS.some((pattern) => label.includes(pattern));
+}
+
+function subscribeNoop(): () => void {
+  return () => {};
+}
+
+function getHudVisibleSnapshot(): boolean {
+  if (typeof window === "undefined") return false;
+  const isDev = process.env.NODE_ENV !== "production";
+  const hasRadarParam = window.location.search.includes("radar=1");
+  return isDev || hasRadarParam;
+}
+
+function formatOffset(seconds: number): string {
+  const m = Math.floor(seconds / 60);
+  const s = seconds % 60;
+  return `+${m > 0 ? `${m}m ` : ""}${s < 10 ? `0${s}` : s}s`;
+}
+
+function createMicroAction(
+  startTimeMs: number,
+  category: MicroAction["category"],
+  label: string,
+  detail?: string
+): MicroAction {
+  const now = Date.now();
+  const offsetSec = Math.max(0, Math.floor((now - startTimeMs) / 1000));
+  return {
+    id: `act_${now}_${Math.random().toString(36).slice(2, 6)}`,
+    timeOffsetSec: offsetSec,
+    timeFormatted: formatOffset(offsetSec),
+    timestamp: new Date(now).toISOString(),
+    category,
+    label,
+    detail,
+  };
 }
 
 export function getOrCreateVisitorId(): string {
@@ -59,12 +121,6 @@ export function logVisitorEvent(
   } catch {
     // Fail silently
   }
-}
-
-function formatOffset(seconds: number): string {
-  const m = Math.floor(seconds / 60);
-  const s = seconds % 60;
-  return `+${m > 0 ? `${m}m ` : ""}${s < 10 ? `0${s}` : s}s`;
 }
 
 function cleanText(text: string | null | undefined, maxLen = 60): string {
@@ -131,85 +187,79 @@ export function VisitorTracker() {
   const activeSectionRef = useRef<{ name: string; enteredAt: number } | null>(null);
   const [hudOpen, setHudOpen] = useState(false);
   const [hudActions, setHudActions] = useState<MicroAction[]>([]);
-  const [hudVisible, setHudVisible] = useState(false);
+  const hudVisible = useSyncExternalStore(
+    subscribeNoop,
+    getHudVisibleSnapshot,
+    () => false
+  );
 
-  // Initialize and enable HUD toggle in dev mode or with ?radar=1 query param
-  useEffect(() => {
-    if (typeof window !== "undefined") {
-      const isDev = process.env.NODE_ENV !== "production";
-      const hasRadarParam = window.location.search.includes("radar=1");
-      setHudVisible(isDev || hasRadarParam);
-    }
-  }, []);
+  const flushActions = useCallback(
+    (
+      eventType: "visit" | "dwell" | "interaction" | "form_intent" = "interaction",
+      actionDetail?: string
+    ) => {
+      if (actionBufferRef.current.length === 0) return;
+      const actionsToSend = [...actionBufferRef.current];
+      actionBufferRef.current = []; // Clear buffer
 
-  const recordAction = (
-    category: MicroAction["category"],
-    label: string,
-    detail?: string
-  ) => {
-    const now = Date.now();
-    const offsetSec = Math.max(0, Math.floor((now - startTimeRef.current) / 1000));
-    const action: MicroAction = {
-      id: `act_${Date.now()}_${Math.random().toString(36).slice(2, 6)}`,
-      timeOffsetSec: offsetSec,
-      timeFormatted: formatOffset(offsetSec),
-      timestamp: new Date().toISOString(),
-      category,
-      label,
-      detail,
-    };
+      const visitorId = getOrCreateVisitorId();
+      const visitCount = Number(localStorage.getItem(VISIT_COUNT_KEY) || "1");
 
-    actionBufferRef.current.push(action);
-    setHudActions((prev) => [...prev.slice(-49), action]);
+      fetch("/api/visitor-alert", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          visitorId,
+          eventType,
+          visitCount,
+          path: window.location.pathname + window.location.hash,
+          referrer: document.referrer || "Direct",
+          screen: `${window.screen.width}x${window.screen.height}`,
+          actionDetail: actionDetail || actionsToSend[actionsToSend.length - 1]?.label,
+          actions: actionsToSend,
+        }),
+        keepalive: true,
+      }).catch(() => {});
+    },
+    []
+  );
 
-    // Save trail in session storage for continuity
-    try {
-      const stored = JSON.parse(sessionStorage.getItem(LOCAL_ACTION_TRAIL_KEY) || "[]");
-      sessionStorage.setItem(
-        LOCAL_ACTION_TRAIL_KEY,
-        JSON.stringify([...stored.slice(-99), action])
+  const recordAction = useCallback(
+    (
+      category: MicroAction["category"],
+      label: string,
+      detail?: string
+    ) => {
+      const action = createMicroAction(
+        startTimeRef.current || Date.now(),
+        category,
+        label,
+        detail
       );
-    } catch {}
 
-    // Flush immediately for high-value clicks/inputs
-    if (
-      category === "input" ||
-      category === "modal" ||
-      label.includes("Start free trial") ||
-      label.includes("Get a demo") ||
-      label.includes("Claim")
-    ) {
-      flushActions("interaction", label);
-    }
-  };
+      actionBufferRef.current.push(action);
+      setHudActions((prev) => [...prev.slice(-49), action]);
 
-  const flushActions = (
-    eventType: "visit" | "dwell" | "interaction" | "form_intent" = "interaction",
-    actionDetail?: string
-  ) => {
-    if (actionBufferRef.current.length === 0) return;
-    const actionsToSend = [...actionBufferRef.current];
-    actionBufferRef.current = []; // Clear buffer
+      // Save trail in session storage for continuity
+      try {
+        const stored = JSON.parse(sessionStorage.getItem(LOCAL_ACTION_TRAIL_KEY) || "[]");
+        sessionStorage.setItem(
+          LOCAL_ACTION_TRAIL_KEY,
+          JSON.stringify([...stored.slice(-99), action])
+        );
+      } catch {}
 
-    const visitorId = getOrCreateVisitorId();
-    const visitCount = Number(localStorage.getItem(VISIT_COUNT_KEY) || "1");
-
-    fetch("/api/visitor-alert", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        visitorId,
-        eventType,
-        visitCount,
-        path: window.location.pathname + window.location.hash,
-        referrer: document.referrer || "Direct",
-        screen: `${window.screen.width}x${window.screen.height}`,
-        actionDetail: actionDetail || actionsToSend[actionsToSend.length - 1]?.label,
-        actions: actionsToSend,
-      }),
-      keepalive: true,
-    }).catch(() => {});
-  };
+      // Flush immediately for high-value clicks/inputs/modals
+      if (
+        category === "input" ||
+        category === "modal" ||
+        isHighIntentCta(label)
+      ) {
+        flushActions("interaction", label);
+      }
+    },
+    [flushActions]
+  );
 
   useEffect(() => {
     startTimeRef.current = Date.now();
@@ -225,7 +275,7 @@ export function VisitorTracker() {
       flushActions("visit");
     }
 
-    // 2. Global Click Capture (Button, Links, Property Cards, Tabs, Sound waves)
+    // 2. Global Click Capture (Button, Links, Property Cards, Tabs)
     const handleDocumentClick = (e: MouseEvent) => {
       const target = e.target as HTMLElement;
       if (!target) return;
@@ -237,6 +287,16 @@ export function VisitorTracker() {
       if (extracted) {
         recordAction(extracted.category, extracted.label, extracted.detail);
       }
+    };
+
+    // 2b. Modal Trigger Custom Events (open-trial, open-demo)
+    const handleOpenTrialEvent = (e: Event) => {
+      const detail = (e as CustomEvent<{ source?: string }>).detail;
+      recordAction("modal", "Opened open-trial modal (10-Roof Brief)", detail?.source);
+    };
+    const handleOpenDemoEvent = (e: Event) => {
+      const detail = (e as CustomEvent<{ source?: string }>).detail;
+      recordAction("modal", "Opened open-demo modal (Walkthrough)", detail?.source);
     };
 
     // 3. Scroll Depth Milestones (25%, 50%, 75%, 90%, 100%)
@@ -253,7 +313,7 @@ export function VisitorTracker() {
         for (const m of milestones) {
           if (percent >= m && !scrollMilestonesRef.current[m]) {
             scrollMilestonesRef.current[m] = true;
-            recordAction("scroll", `Scrolled to ${m}% depth of landing page`);
+            recordAction("scroll", `Scrolled to ${m}% depth of page`);
           }
         }
       }, 200);
@@ -312,7 +372,6 @@ export function VisitorTracker() {
       if (inputDebounce) clearTimeout(inputDebounce);
       inputDebounce = setTimeout(() => {
         if (val.length >= 3) {
-          // Mask middle of email for privacy if present
           let masked = val;
           if (val.includes("@")) {
             const parts = val.split("@");
@@ -347,6 +406,8 @@ export function VisitorTracker() {
 
     // Attach all listeners
     document.addEventListener("click", handleDocumentClick, { capture: true });
+    window.addEventListener("open-trial", handleOpenTrialEvent);
+    window.addEventListener("open-demo", handleOpenDemoEvent);
     window.addEventListener("scroll", handleScroll, { passive: true });
     document.addEventListener("input", handleInput, { passive: true });
     document.addEventListener("copy", handleCopy);
@@ -354,6 +415,8 @@ export function VisitorTracker() {
 
     return () => {
       document.removeEventListener("click", handleDocumentClick, { capture: true });
+      window.removeEventListener("open-trial", handleOpenTrialEvent);
+      window.removeEventListener("open-demo", handleOpenDemoEvent);
       window.removeEventListener("scroll", handleScroll);
       document.removeEventListener("input", handleInput);
       document.removeEventListener("copy", handleCopy);
@@ -363,7 +426,7 @@ export function VisitorTracker() {
       if (inputDebounce) clearTimeout(inputDebounce);
       sectionObserver.disconnect();
     };
-  }, []);
+  }, [flushActions, recordAction]);
 
   return (
     <>

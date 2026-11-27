@@ -150,6 +150,7 @@ export function AIEngineSection() {
                     src={current.image}
                     alt={current.imageCaption}
                     fill
+                    sizes="(max-width: 1024px) 100vw, 600px"
                     className="object-cover"
                   />
                   <div className="absolute bottom-3 left-3 px-3 py-1 rounded-md bg-[#111110]/85 text-white text-[13px] font-medium">

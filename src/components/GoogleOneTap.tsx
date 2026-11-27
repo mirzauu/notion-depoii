@@ -33,9 +33,6 @@ export function GoogleOneTap() {
 
     if (!clientId) return;
 
-    const scriptId = "google-jssdk-one-tap";
-    let script = document.getElementById(scriptId) as HTMLScriptElement | null;
-
     const setupOneTap = () => {
       if (initializedRef.current || !window.google?.accounts?.id) return;
       initializedRef.current = true;
@@ -88,21 +85,44 @@ export function GoogleOneTap() {
       }
     };
 
-    if (!script) {
-      script = document.createElement("script");
-      script.id = scriptId;
-      script.src = "https://accounts.google.com/gsi/client";
-      script.async = true;
-      script.defer = true;
-      script.onload = setupOneTap;
-      document.head.appendChild(script);
-    } else if (window.google?.accounts?.id) {
-      setupOneTap();
-    } else {
-      script.addEventListener("load", setupOneTap);
-    }
+    const loadGsi = () => {
+      const scriptId = "google-jssdk-one-tap";
+      let script = document.getElementById(scriptId) as HTMLScriptElement | null;
+      if (!script) {
+        script = document.createElement("script");
+        script.id = scriptId;
+        script.src = "https://accounts.google.com/gsi/client";
+        script.async = true;
+        script.defer = true;
+        script.onload = setupOneTap;
+        document.head.appendChild(script);
+      } else if (window.google?.accounts?.id) {
+        setupOneTap();
+      } else {
+        script.addEventListener("load", setupOneTap);
+      }
+    };
+
+    const events: (keyof WindowEventMap)[] = [
+      "pointerdown",
+      "keydown",
+      "scroll",
+      "touchstart",
+    ];
+    let triggered = false;
+    const onFirstInteraction = () => {
+      if (triggered) return;
+      triggered = true;
+      events.forEach((ev) => window.removeEventListener(ev, onFirstInteraction));
+      loadGsi();
+    };
+
+    events.forEach((ev) =>
+      window.addEventListener(ev, onFirstInteraction, { once: true, passive: true })
+    );
 
     return () => {
+      events.forEach((ev) => window.removeEventListener(ev, onFirstInteraction));
       try {
         window.google?.accounts?.id?.cancel();
       } catch {}

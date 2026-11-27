@@ -608,8 +608,8 @@ export function WorkspaceDemo() {
                         src={activeProperty.headerPhoto}
                         alt={activeProperty.name}
                         fill
+                        sizes="64px"
                         className="object-cover"
-                        priority
                       />
                     </div>
 
@@ -1022,8 +1022,8 @@ export function WorkspaceDemo() {
                           src={aerialView === "roof" ? activeProperty.satelliteImage : activeProperty.headerPhoto}
                           alt={`${activeProperty.name} aerial roof view`}
                           fill
+                          sizes="(max-width: 1024px) 100vw, 760px"
                           className="object-cover"
-                          priority
                         />
                         <div className="absolute bottom-2 left-2 z-10 px-2 py-0.5 rounded bg-black/80 text-white text-[11px] font-medium pointer-events-none">
                           {aerialView === "roof" ? "Roof Timeline Comparison" : `${activeProperty.sqft} Footprint`}
@@ -1141,6 +1141,7 @@ export function WorkspaceDemo() {
                           src={prop.thumbnailPhoto}
                           alt={prop.name}
                           fill
+                          sizes="40px"
                           className="object-cover"
                         />
                       </div>
